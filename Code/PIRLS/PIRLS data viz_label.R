@@ -112,7 +112,7 @@ tf <- tween_states(ls, tweenlength= 1, statelength=0, ease='cubic-in-out',nframe
 
 
 
-plotCaption <- expression(atop('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.                                                    ','SOURCE: International Association for the Evaluation of Educational Achievement (IEA), Progress in International Reading Literacy Study (PIRLS), 2016.'))
+plotCaption <- expression(atop('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.                                                               ','SOURCE: International Association for the Evaluation of Educational Achievement (IEA), Progress in International Reading Literacy Study (PIRLS), 2016.'))
 
 # plotCaption <- list()
 # plotNote <- expression(paste("NOTE: Education systems are ordered by the percentage of students reaching the ", italic("Advanced")," international benchmark."))
@@ -122,7 +122,9 @@ plotCaption <- expression(atop('NOTE: Education systems are ordered by the perce
 # 
 # plotCaption <- getWrappedText(plotCaption, width = 400, ps = 10)
 # 
-plotSubtitle <- "Education system"
+
+#plotSubtitle <- "Education system"
+plotSubtitle <- ""
 
 plotTitle <- c("Percentage of fourth-grade students reaching the ePIRLS \ninternational benchmarks in online informational reading, \nby education system: 2016")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
@@ -135,8 +137,8 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      panel.grid = element_blank(),
                      axis.title.x=element_text(size=18, margin = margin(t=15, b = 5), hjust = .5),
                      #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
-                     axis.text.x=element_text(size=16, angle = 0, hjust = 0.5, family = "Calibri"),
-                     axis.text.y=element_text(size=16, hjust = 0, family = "Calibri", face = "bold", color = "black"),
+                     axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "Calibri"),
+                     axis.text.y=element_text(size=22, hjust = 0, family = "Calibri", face = "bold", color = "black"),
                      axis.line.x = element_line(size = 1),
                      axis.line.y = element_blank(),
                      axis.ticks.x = element_line(size = 1),
@@ -151,12 +153,12 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      legend.box.just = "left",
                      legend.title = element_blank(),
                      #legend.spacing = unit(c(1), "line"),
-                     legend.key.height=unit(1,"line"),
-                     legend.key.width=unit(1,"line"),
-                     legend.text = element_text(size=20, family = "Calibri", hjust= 0,lineheight=1)
+                     legend.key.height=unit(1.5,"line"),
+                     legend.key.width=unit(1.5,"line"),
+                     legend.text = element_text(size=25, family = "Calibri", hjust= 0,lineheight=1)
 )
 
-
+ggrepelSeed <- 1234
 
 
 # plotting
@@ -315,13 +317,13 @@ saveGIF({
         geom_text_repel(data = subset(tf, .frame == max(tf$.frame)), 
                         mapping = aes(x = Country, y = Percent, label = labelNormal, group = Level),
                         position = position_stack(vjust = 0.5), 
-                        color = "white", size = 5,
+                        color = "white", size = 7,
                         point.padding = NA,
                         seed = ggrepelSeed, direction = "x", force = 2, show.legend = FALSE) +
         #labelNudge 
         geom_text_repel(data = subset(tf, .frame == max(tf$.frame)), 
                         mapping = aes(x = Country, y = Percent, label = labelNudge, group = Level),
-                        color = "white",size = 5,
+                        color = "white",size = 7,
                         position = position_stack(vjust = 0.5), hjust = -2, seed = ggrepelSeed, direction = "x", force = 2, show.legend = FALSE)
     
     
@@ -358,7 +360,9 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name="experiment_v15.gif",interval = .02, ani.width = 1080, ani.height = 900)
+movie.name="experiment_v17.gif",interval = .02, ani.width = 1080, ani.height = 900)
+
+
 
 
 
