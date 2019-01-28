@@ -57,7 +57,6 @@ setwd(wd)
 theme_map <- function(...) {
   theme_void() +
     theme(
-      text = element_text(color = "#22211d"),
       axis.line = element_blank(),
       axis.text.x = element_blank(),
       axis.text.y = element_blank(),
@@ -75,7 +74,6 @@ theme_map <- function(...) {
 }
 
 
-
 ## using sf
 library(albersusa) # devtools::install_github("hrbrmstr/albersusa")
 library(sf)
@@ -87,6 +85,10 @@ library(viridis)
 library(scales)
 library(purrr)
 library(readxl)
+library(showtext)
+library(dplyr)
+library(extrafont)
+library(grDevices)
 
 figure_list <- c("fig 2-11", "fig1-3", "fig1-4", "fig2-12", "fig2-13", "fig2-14", 
                  "fig2-15", "fig2-16", "fig2-20", "fig2-21", "fig2-22", "fig2-3", 
@@ -101,18 +103,19 @@ for (figure_name in figure_list){
   
   #select the id and value columns and make them factors
   state_data <- state_data_4columns %>% 
-    select(id, value) %>% 
+    dplyr::select(id, value) %>% 
     mutate(id = as.factor(id),
            value = as.factor(value))
   
   #select the legend cells in column 4
   state_legend <- state_data_4columns %>% 
-    select(X__2) %>% 
+    dplyr::select("..4") %>% 
     na.omit() 
   
   #get rid of the string in the brackets and the things before " ="
-  state_legend <- gsub("\\s*\\([^\\)]+\\)","",as.character(state_legend$X__2))  
-  state_legend <- gsub("^.+=\\s","",state_legend)
+  #state_legend <- gsub("\\s*\\([^\\)]+\\)","",as.character(state_legend$'..4'))  
+  #state_legend <- gsub("^.+=\\s","",state_legend)
+  state_legend <- gsub("^.+=\\s","",as.character(state_legend$'..4'))
     
   
   # usa albers projection
@@ -200,21 +203,32 @@ for (figure_name in figure_list){
   #rename factor levels in z$value (so that the legend levels could be customized)
   z$value <- factor(z$value, levels = levels(z$value), labels = sort(state_legend))
   
-  gg <- ggplot(z) +
-    geom_sf(aes(fill = value), size= .75, color = "#36454f") + theme_map() + theme(text = element_text(size = 12),panel.grid.major = element_line(colour = 'transparent'),
-                                                                                   legend.background = element_rect(fill="#f5f5f5", color = "transparent"),
-                                                                                   legend.margin=margin(t = .5,l = .5,b = .5,r = .5, unit='cm'),
-                                                                                   legend.text = element_text(size = 12), legend.key = element_rect(size = 1, color = "#f5f5f5"),
-                                                                                   legend.position = c(1, 0.3),
-                                                                                   plot.margin=grid::unit(c(0,50,0,-5), "mm")) +
+  # #load font
+  # font_add_google("Open Sans")
+  # showtext_auto()
+  font_path <- "C:/Windows/Fonts/Museo_Slab_1.ttf"
+  font_add("Museo Slab 500", font_path)
+  showtext_auto()
+  
+  
+  
+  gg <- ggplot(z) + geom_sf(aes(fill = value), size= .75, color = "#36454f") + theme_map() + 
+    theme(text = element_text(family = "Museo Slab 500", size = 12),panel.grid.major = element_line(colour = 'transparent'),
+          legend.background = element_rect(fill="#f5f5f5", color = "transparent"),
+          legend.margin=margin(t = .5,l = .5,b = .5,r = 2, unit='cm'),
+          legend.text = element_text(family = "Museo Slab 500", size = 12), 
+          legend.key = element_rect(size = 1, color = "#f5f5f5"),
+          legend.position = c(1, 0.3),
+          plot.margin=grid::unit(c(0,50,0,-5), "mm")) +
     scale_fill_manual(na.value = "black",values = colfunc(num_values)) +
-    geom_text(mapping = aes(COORDS_X, COORDS_Y, label = iso_3166_2, color = fontColor), size = 4.5, show.legend = FALSE) +
+    geom_text(mapping = aes(COORDS_X, COORDS_Y, label = iso_3166_2, family = "Museo Slab 500", color = fontColor), size = 4.5, show.legend = FALSE) +
     scale_color_manual(values=c(rep("white", num_values%/%2), rep("black", num_values - num_values%/%2 + 1))) +
     guides(fill = guide_legend(
       override.aes = list(size = .5),
-      title="Value"
+      title="Total Programs Offered per 1,000\nPeople"
     )
     )
+
   
   gg <- gg + 
     annotate("segment", x = 1990000, xend = 2170000, y = -440000, yend =  -550000, colour = "black") + # MD
@@ -224,21 +238,35 @@ for (figure_name in figure_list){
   
   gg
   
-  #previous code for eps output, though the text appears as image not text
-  # cairo_ps(paste0("./results/", figure_name, ".eps"), width = 13.84, height = 7.86)
-  # print(gg)
-  # dev.off()
   
-  #postscript() and ggsave() below works for eps
-  # setEPS()
-  # postscript(paste0("./results/", "postscript", ".eps"), family = "ArialMT", width = 13.84, height = 7.86 )
-  # print(gg)
-  # dev.off()
-  
-  
-  ggsave(paste0("./results/", figure_name, ".eps"), width = 13.84, height = 7.86, dpi = 300, family = "ArialMT")
-  ggsave(paste0("./results/", figure_name, ".png"), width = 13.84, height = 7.86, dpi = 96)
-  cairo_pdf(paste0("./results/", figure_name, ".pdf"), width = 13.84, height = 7.86)
-  print(gg)
+  ggg <- ggplotGrob(gg)
+  grid::grid.draw(ggg)
+
+  # load font again
+  loadfonts(device = "postscript")
+  # save as eps
+  setEPS()
+  postscript(paste0("./results/", figure_name, ".eps"), family ="Museo Slab 500" ,width = 13.84, height = 7.86) #width and height are in inches
+  grid::grid.draw(ggg)
   dev.off()
+  
+  
+  # # save as eps - option 2 (previous code for eps output, though the text appears as image not text)
+  # cairo_ps(paste0("./results/", figure_name, "1.eps"), width = 13.84, height = 7.86, family = "Comic Sans MS")
+  # print(gg)
+  # dev.off()
+  # 
+  # # save as eps - option 3 (worked for a while but didn't work again) code below worked for a while to produce Non-outlined texts, but didn't work in other times
+  # #load font
+  # #font_import()
+  # loadfonts(device = "postscript")
+  # loadfonts(device="win")
+  # ggsave(paste0("./results/", "ex7", ".eps"), width = 13.84, height = 7.86, dpi = 300, family = "Museo Slab 500", device = "eps")
+  # 
+  # 
+  # # saving as other formats
+  # #ggsave(paste0("./results/", figure_name, ".png"), width = 13.84, height = 7.86, dpi = 96)
+  # cairo_pdf(paste0("./results/", figure_name, "2.pdf"), family = "Open Sans", width = 13.84, height = 7.86)
+  # print(gg)
+  # dev.off()
 }
