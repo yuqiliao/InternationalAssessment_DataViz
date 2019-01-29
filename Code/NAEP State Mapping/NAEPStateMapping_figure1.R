@@ -36,6 +36,17 @@ data$St <- factor(data$St, levels = orderSt)
 
 glimpse(data)
 ### Plotting -----
+# define index of testing programs
+SBACMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "SBAC"),1)
+SBACMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "SBAC"),1)
+ACTMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "ACT"),1)
+ACTMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "ACT"),1)
+PARCCMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "PARCC"),1)
+PARCCMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "PARCC"),1)
+  
+
+
+
 # define yAxisBreaks
 yAxisFloor <- 160
 yAxisCeiling <- 270
@@ -45,7 +56,7 @@ yAxisBreaksMin <- sum(head(yAxisBreaks, 2))/2
 yAxisBreaksMax <- sum(tail(yAxisBreaks, 2))/2
 
 # define y axis break parallel lines
-gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#000000", lwd = 0.5)) 
+gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#2d2a26", lwd = 0.66)) 
 
 # define legend position on x axis & y axis
 numberSates <- length(data$St)
@@ -83,12 +94,13 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        panel.grid.minor.y=element_blank(),
                        axis.title = element_text(family="Open Sans", color = "#000000", 
                                                  size = 10, face = "bold"),
-                       axis.line.x=element_line(color="#000000", size = 0.5),
+                       axis.line.x=element_line(color="#2d2a26", size = 0.235),
+                       #axis.line.y set to be blank so the line breaks could have empty space
                        axis.line.y=element_blank(),
                        axis.text.x=element_blank(),
                        axis.text.y=element_text(color="#000000", size= 10),
                        axis.ticks.x=element_blank(),
-                       axis.ticks.y=element_line(color="#000000", size= 0.5),
+                       axis.ticks.y=element_line(color="#2d2a26", size= 0.235),
                        axis.ticks.length = unit(7.3,"points"),
                        plot.title=element_text(family="Open Sans", size= 10 ,lineheight=2, 
                                                color="#000000", face = "bold"),
@@ -101,14 +113,14 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
   # draw hlines and the shades between them
   scale_x_discrete() +
   geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = 208, ymax = 238), fill = "#D1D3D4") +
-  geom_hline(yintercept = basic, color = "#77787B") +
-  geom_hline(yintercept = proficient, color = "#77787B") +
+  geom_hline(yintercept = basic, color = "#77787B", size = 0.235) +
+  geom_hline(yintercept = proficient, color = "#77787B", size = 0.235) +
   
   # add achievement level text
   annotate("text", x = length(data$St)/2, y = basic - 5, label = "NAEP~italic(Basic)~(208)", 
-           parse = TRUE, hjust = 0.5, color = "#000000", size = 3.5, family="Open Sans") +
+           parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
   annotate("text", x = length(data$St)/2, y = proficient + 5, label = "NAEP~italic(Proficient)~(238)", 
-           parse = TRUE, hjust = 0.5, color = "#000000", size = 3.5, family="Open Sans") +
+           parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
   
   # draw error bars and point
   geom_errorbar(aes(ymin = `Lower Cut`, ymax = `Upper Cut`), size = 0.47, color = "#001871") +
@@ -116,7 +128,18 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
   geom_point(color = "#C69214", size = 1) +
   
   # add lines for testing program benchmarks - ask Katie to confirm
-  annotate("rect", xmin = 16 - 1, xmax = 28 + 1, ymin = 220, ymax = 221 , color = "#808184", size = .5) +
+  annotate("segment", x = SBACMin - 0.4, xend = SBACMax + 0.4, y = data$`Lower Cut`[SBACMin] - 7, yend = data$`Lower Cut`[SBACMin] - 7 , color = "#808184", size = 1.5) +
+  annotate("text", x = SBACMin + (SBACMax - SBACMin)/2, y = data$`Lower Cut`[SBACMin] - 10, label = "SBAC", 
+           hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
+  
+  annotate("segment", x = ACTMin - 0.4, xend = ACTMax + 0.4, y = data$`Lower Cut`[ACTMin] - 7, yend = data$`Lower Cut`[ACTMin] - 7 , color = "#808184", size = 1.5) +
+  annotate("text", x = ACTMin + (ACTMax - ACTMin)/2, y = data$`Lower Cut`[ACTMin] - 10, label = "ACT", 
+           hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
+  
+  annotate("segment", x = PARCCMin - 0.4, xend = PARCCMax + 0.4, y = data$`Lower Cut`[PARCCMin] - 7, yend = data$`Lower Cut`[PARCCMin] - 7 , color = "#808184", size = 1.5) +
+  annotate("text", x = PARCCMin + (PARCCMax - PARCCMin)/2, y = data$`Lower Cut`[PARCCMin] - 10, label = "PARCCM", 
+           hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
+  
   
   # add legend (fake data)
   geom_point(aes(x = xAxisPoint, y = yAxisPoint), color = "#C69214", size = 1) +
@@ -141,9 +164,9 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
                      labels = c(0, yAxisBreaks[2:(length(yAxisBreaks) - 1)], 500), 
                      breaks = yAxisBreaks, expand = c(0,0)) +
   coord_cartesian(clip = "off") +
-  annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#808184", size = .5) +
-  annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#808184", size = .5) +
-  annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMax + 1, yend = max(yAxisBreaks), color = "#808184", size = .5) +
+  annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
+  annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
+  annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMax + 1, yend = max(yAxisBreaks), color = "#2d2a26", size = 0.235) +
   annotation_custom(gline, ymin= yAxisBreaksMin - 2, ymax= yAxisBreaksMin, xmin= -Inf, xmax= Inf) + 
   annotation_custom(gline, ymin= yAxisBreaksMin, ymax= yAxisBreaksMin + 2, xmin= -Inf, xmax= Inf) +
   annotation_custom(gline, ymin= yAxisBreaksMax - 2, ymax= yAxisBreaksMax, xmin= -Inf, xmax= Inf) + 
@@ -177,8 +200,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "ex3", ".eps"), family = "Open Sans", width = 7.4328, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "ex4", ".eps"), family = "Open Sans", width = 7.4328, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
-
 
