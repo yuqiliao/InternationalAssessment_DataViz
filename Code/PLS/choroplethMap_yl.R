@@ -208,14 +208,16 @@ for (figure_name in figure_list){
   # showtext_auto()
   font_path <- "C:/Windows/Fonts/Museo_Slab_1.ttf"
   font_add("Museo Slab 500", font_path)
+  font_add("Museo Slab 700", font_path)
   showtext_auto()
   
   
   
-  gg <- ggplot(z) + geom_sf(aes(fill = value), size= .75, color = "#36454f") + theme_map() + 
+  gg <- ggplot(z) + geom_sf(aes(fill = value), size= .21, color = "#36454f") + theme_map() + 
     theme(text = element_text(family = "Museo Slab 500", size = 12),panel.grid.major = element_line(colour = 'transparent'),
           legend.background = element_rect(fill="#f5f5f5", color = "transparent"),
           legend.margin=margin(t = .5,l = .5,b = .5,r = 2, unit='cm'),
+          legend.title = element_text(family = "Museo Slab 700", size = 12),
           legend.text = element_text(family = "Museo Slab 500", size = 12), 
           legend.key = element_rect(size = 1, color = "#f5f5f5"),
           legend.position = c(1, 0.3),
@@ -246,7 +248,7 @@ for (figure_name in figure_list){
   loadfonts(device = "postscript")
   # save as eps
   setEPS()
-  postscript(paste0("./results/", figure_name, ".eps"), family ="Museo Slab 500" ,width = 13.84, height = 7.86) #width and height are in inches
+  postscript(paste0("./results/", figure_name, ".eps"), fonts =c("Museo Slab 500", "Museo Slab 700") ,width = 13.84, height = 7.86) #width and height are in inches
   grid::grid.draw(ggg)
   dev.off()
   
