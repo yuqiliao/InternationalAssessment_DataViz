@@ -60,12 +60,12 @@ gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#2d2a26", lwd
 
 # define legend position on x axis & y axis
 numberSates <- length(data$St)
-xAxisPoint <- round(numberSates * 9/17)
+xAxisPoint <- round(numberSates * 0.52)
 yAxisPoint <- yAxisBreaksMin
 xAxisPointText <- xAxisPoint + 1
 yAxisPointText <- yAxisPoint
 
-xAxisErrorBar <- round(numberSates * 4/5)
+xAxisErrorBar <- round(numberSates * 0.79)
 yAxisErrorBarMin <- yAxisPoint - 2
 yAxisErrorBarMax <- yAxisPoint + 2
 xAxisErrorBarText <- xAxisErrorBar + 1
@@ -104,7 +104,7 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        axis.ticks.length = unit(7.3,"points"),
                        plot.title=element_text(family="Open Sans", size= 10 ,lineheight=2, 
                                                color="#000000", face = "bold"),
-                       aspect.ratio = 3.718/7.4328
+                       aspect.ratio = 3.718/7.5
                        )
 
 
@@ -112,7 +112,7 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
 plot <- ggplot(data, aes(x = St, y = midPoint)) +
   # draw hlines and the shades between them
   scale_x_discrete() +
-  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = 208, ymax = 238), fill = "#D1D3D4") +
+  geom_rect(aes(xmin = -Inf, xmax = Inf, ymin = 208, ymax = 238), fill = "#ECECEC") +
   geom_hline(yintercept = basic, color = "#77787B", size = 0.235) +
   geom_hline(yintercept = proficient, color = "#77787B", size = 0.235) +
   
@@ -127,17 +127,17 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
   geom_text(aes(y = `Lower Cut` - 2, label = St), family="Open Sans", color = "#000000", size = 2) +
   geom_point(color = "#C69214", size = 1) +
   
-  # add lines for testing program benchmarks - ask Katie to confirm
-  annotate("segment", x = SBACMin - 0.4, xend = SBACMax + 0.4, y = data$`Lower Cut`[SBACMin] - 7, yend = data$`Lower Cut`[SBACMin] - 7 , color = "#808184", size = 1.5) +
-  annotate("text", x = SBACMin + (SBACMax - SBACMin)/2, y = data$`Lower Cut`[SBACMin] - 10, label = "SBAC", 
+  # add lines for testing program benchmarks
+  annotate("segment", x = SBACMin - 0.4, xend = SBACMax + 0.4, y = data$`Lower Cut`[SBACMin] - 5, yend = data$`Lower Cut`[SBACMin] - 5 , color = "#2d2a26", size = 0.235) +
+  annotate("text", x = SBACMin + (SBACMax - SBACMin)/2, y = data$`Lower Cut`[SBACMin] - 8, label = "SBAC", 
            hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
   
-  annotate("segment", x = ACTMin - 0.4, xend = ACTMax + 0.4, y = data$`Lower Cut`[ACTMin] - 7, yend = data$`Lower Cut`[ACTMin] - 7 , color = "#808184", size = 1.5) +
-  annotate("text", x = ACTMin + (ACTMax - ACTMin)/2, y = data$`Lower Cut`[ACTMin] - 10, label = "ACT", 
+  annotate("segment", x = ACTMin - 0.4, xend = ACTMax + 0.4, y = data$`Lower Cut`[ACTMin] - 5, yend = data$`Lower Cut`[ACTMin] - 5 , color = "#2d2a26", size = 0.235) +
+  annotate("text", x = ACTMin + (ACTMax - ACTMin)/2, y = data$`Lower Cut`[ACTMin] - 8, label = "ACT", 
            hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
   
-  annotate("segment", x = PARCCMin - 0.4, xend = PARCCMax + 0.4, y = data$`Lower Cut`[PARCCMin] - 7, yend = data$`Lower Cut`[PARCCMin] - 7 , color = "#808184", size = 1.5) +
-  annotate("text", x = PARCCMin + (PARCCMax - PARCCMin)/2, y = data$`Lower Cut`[PARCCMin] - 10, label = "PARCCM", 
+  annotate("segment", x = PARCCMin - 0.4, xend = PARCCMax + 0.4, y = data$`Lower Cut`[PARCCMin] - 5, yend = data$`Lower Cut`[PARCCMin] - 5 , color = "#2d2a26", size = 0.235) +
+  annotate("text", x = PARCCMin + (PARCCMax - PARCCMin)/2, y = data$`Lower Cut`[PARCCMin] - 8, label = "PARCCM", 
            hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
   
   
@@ -200,7 +200,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "ex4", ".eps"), family = "Open Sans", width = 7.4328, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure1_ex5", ".eps"), family = "Open Sans", width = 7.5, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
