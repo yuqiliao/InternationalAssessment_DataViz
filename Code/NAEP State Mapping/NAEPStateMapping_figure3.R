@@ -21,25 +21,20 @@ setwd(wd)
 ### Reading in data -----
 data <- read_excel("./Materials/G4ReadingBottom_yl.xlsx")
 
-# # define order of year
-# orderYear <- data$year
-# data$St <- factor(data$St, levels = orderSt)
+# # add dummy data (years) for placeholder #decided to use scale_x_continuous for now so this is not needed
+# data <- data %>% 
+#   add_row(year = 2009:2010, Highest = c(NA, NA), 
+#           Lowest = c(NA, NA), range = c(NA, NA), .before = 2)
+# 
+# # define order of year (turn x-axis into a categorical variable)
+# orderYear <- sort(data$year)
+# data$year <- factor(data$year, levels = orderYear)
 
 glimpse(data)
 ### Plotting -----
+# define color
 barCol <- "#212C68"
 
-# # define index of testing programs
-# SBACMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "SBAC"),1)
-# SBACMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "SBAC"),1)
-# ACTMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "ACT"),1)
-# ACTMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "ACT"),1)
-# PARCCMin <- head(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "PARCC"),1)
-# PARCCMax <- tail(which(!is.na(data$`Testing Program`) & data$`Testing Program` %in% "PARCC"),1)
-#   
-# 
-# 
-# 
 # define yAxisBreaks
 yAxisFloor <- 150
 yAxisCeiling <- 260
@@ -69,8 +64,38 @@ gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#2d2a26", lwd
 # basic <- 208
 # proficient <- 238
 
+# define functions to squish space between empty years [reference: https://stackoverflow.com/questions/47234710/how-can-i-remove-part-of-y-axis-and-reverse-the-axis-in-ggplot2]
+squish_trans <- function(from, to, factor) { 
+  
+  trans <- function(x) {    
+    # get indices for the relevant regions
+    isq <- x > from & x < to
+    ito <- x >= to
+    
+    # apply transformation
+    x[isq] <- from + (x[isq] - from)/factor
+    x[ito] <- from + (to - from)/factor + (x[ito] - to)
+    
+    return(x)
+  }
+  
+  inv <- function(x) {
+    
+    # get indices for the relevant regions
+    isq <- x > from & x < from + (to - from)/factor
+    ito <- x >= from + (to - from)/factor
+    
+    # apply transformation
+    x[isq] <- from + (x[isq] - from) * factor
+    x[ito] <- to + (x[ito] - (from + (to - from)/factor))
+    
+    return(x)
+  }
+  
+  # return the transformation
+  return(trans_new("squished", trans, inv))
+}
 
-# define colors
 
 # load font
 font_add_google("Open Sans")
@@ -90,14 +115,14 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        axis.line.x=element_line(color="#2d2a26", size = 0.235),
                        #axis.line.y set to be blank so the line breaks could have empty space
                        axis.line.y=element_blank(),
-                       axis.text.x=element_text(color="#000000", size= 10),
+                       axis.text.x=element_blank(),
                        axis.text.y=element_text(color="#000000", size= 10),
                        axis.ticks.x=element_blank(),
                        axis.ticks.y=element_line(color="#2d2a26", size= 0.235),
                        axis.ticks.length = unit(7.3,"points"),
                        plot.title=element_text(family="Open Sans", size= 10 ,lineheight=2, 
-                                               color="#000000", face = "bold"),
-                       aspect.ratio = 3.718/7.4328
+                                               color="#000000", face = "bold")
+                       #aspect.ratio = 3.718/7.4328
                        )
 
 
@@ -124,9 +149,10 @@ plot <- ggplot(data, aes(x = year, y = Highest)) +
   scale_y_continuous(limits = c(yAxisFloor, yAxisCeiling), 
                      labels = c(0, yAxisBreaks[2:(length(yAxisBreaks) - 1)], 500), 
                      breaks = yAxisBreaks, expand = c(0,0)) +
-  scale_x_discrete(limits = c(2007, 2015, 2017),
+  scale_x_continuous(#limits = c(2006, 2018),
                      labels = c(2007, 2015, 2017),
-                     breaks = c(2007, 2015, 2017) ) +
+                     breaks = c(2007, 2015, 2017) ,
+                     trans = squish_trans(2008,2014,4)) +
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
   annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
@@ -164,7 +190,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure3_ex2", ".eps"), family = "Open Sans", width = 7.4328, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure3_ex3", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
