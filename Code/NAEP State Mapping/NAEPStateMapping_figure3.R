@@ -110,7 +110,7 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        panel.grid.major.x=element_blank(),
                        panel.grid.minor.x=element_blank(),
                        panel.grid.minor.y=element_blank(),
-                       axis.title = element_text(family="Open Sans", color = "#000000", 
+                       axis.title.x = element_text(family="Open Sans", color = "#000000", 
                                                  size = 10, face = "bold"),
                        axis.line.x=element_line(color="#2d2a26", size = 0.235),
                        #axis.line.y set to be blank so the line breaks could have empty space
@@ -152,7 +152,7 @@ plot <- ggplot(data, aes(x = year, y = Highest)) +
   scale_x_continuous(#limits = c(2006, 2018),
                      labels = c(2007, 2015, 2017),
                      breaks = c(2007, 2015, 2017) ,
-                     trans = squish_trans(2008,2014,4)) +
+                     trans = squish_trans(2008,2014,3)) +
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
   annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
@@ -190,7 +190,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure3_ex3", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure3_ex4", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
