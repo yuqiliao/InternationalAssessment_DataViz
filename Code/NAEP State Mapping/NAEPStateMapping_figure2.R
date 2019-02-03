@@ -48,7 +48,7 @@ showtext_auto()
 theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        panel.background=element_blank(),
                        panel.border=element_rect(color="transparent"),
-                       plot.margin = unit(c(0,0.05,0,0), "npc"),
+                       plot.margin = unit(c(0,0.02,0,0), "npc"),
                        panel.grid.major.y=element_blank(),
                        panel.grid.major.x=element_blank(),
                        panel.grid.minor.x=element_blank(),
@@ -57,23 +57,43 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                                                  size = 10, face = "bold"),
                        axis.line.x=element_line(color="#2d2a26", size = 0.235),
                        axis.line.y=element_line(color="#2d2a26", size = 0.235),
-                       axis.text.x=element_text(color="#000000", size= 10),
-                       axis.text.y=element_text(color="#000000", size= 10, face = "italic"),
+                       axis.text.x=element_text(color="#000000", size= 10, margin = margin(t = 3)),
+                       axis.text.y=element_text(color="#000000", size= 10, face = "italic",
+                                                margin = margin(r = 0)),
                        axis.ticks.y=element_blank(),
                        axis.ticks.x=element_line(color="#2d2a26", size= 0.235),
                        axis.ticks.length = unit(7.3,"points"),
                        plot.title=element_text(family="Open Sans", size= 10 ,lineheight=2, 
                                                color="#000000", face = "bold"),
                        legend.title = element_blank(),
-                       #legend.spacing = unit(c(1), "line"),
+                       #legend.spacing.y = unit(1, "cm"), #not working
                        legend.key.height=unit(0.7,"line"),
                        legend.key.width=unit(0.7,"line"),
+                       #legend.key.size = unit(2, "cm"),
                        legend.text = element_text(size=7, family = "Open Sans"),
                        legend.position = c(0.9, 0.85),
                        legend.box.background = element_blank()
                        #legend.box.margin = margin(0,0,0,0)
                        #aspect.ratio = 3.718/7.4328
                        )
+
+# add margins to legend squares [reference: https://github.com/tidyverse/ggplot2/issues/2844]
+draw_key_polygon3 <- function(data, params, size) {
+  lwd <- min(data$size, min(size) / 4)
+  
+  grid::rectGrob(
+    width = grid::unit(0.7, "npc"),
+    height = grid::unit(0.7, "npc"),
+    gp = grid::gpar(
+      col = data$colour,
+      fill = alpha(data$fill, data$alpha),
+      lty = data$linetype,
+      lwd = lwd * .pt,
+      linejoin = "mitre"
+    ))
+}
+GeomCol$draw_key = draw_key_polygon3
+# end margin code
 
 
 # plotting
@@ -94,7 +114,7 @@ plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = 
                      breaks = yAxisBreaks, expand = c(0,0)) +
   
   # add text/label
-  geom_text(colour = rev(data$yearCol), size = 2, position = position_dodge(width = 0.8), hjust = -0.2) +
+  geom_text(colour = rev(data$yearCol), size = 2, position = position_dodge(width = 0.8), hjust = -0.1) +
   
   # apply themes 
   theme_bw() + 
@@ -130,7 +150,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure2_ex1", ".eps"), family = "Open Sans", width = 4.2032, height = 2.1025) #width and height are in inches
+postscript(paste0("./Results/", "figure2_ex2", ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
