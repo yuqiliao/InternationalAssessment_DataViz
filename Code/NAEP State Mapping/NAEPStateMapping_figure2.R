@@ -114,7 +114,7 @@ plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = 
                      breaks = yAxisBreaks, expand = c(0,0)) +
   
   # add text/label
-  geom_text(colour = rev(data$yearCol), size = 3.5, position = position_dodge(width = 0.8), hjust = -0.6) +
+  geom_text(data = data, mapping = aes(x = proficiencyLevel, y = number + 0.6), colour = rev(data$yearCol), size = 3.5, position = position_dodge(width = 0.8), hjust = 0) +
   
   # apply themes 
   theme_bw() + 
