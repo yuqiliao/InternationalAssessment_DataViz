@@ -44,7 +44,7 @@ yAxisBreaksMin <- sum(head(yAxisBreaks, 2))/2
 yAxisBreaksMax <- sum(tail(yAxisBreaks, 2))/2
 
 # define y axis break parallel lines
-gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#2d2a26", lwd = 0.66))
+gline <- linesGrob(y = c(0, 1),x = c(-.021, .021),  gp = gpar(col = "#2d2a26", lwd = 0.66))
 # 
 # # define legend position on x axis & y axis
 # numberSates <- length(data$St)
@@ -152,7 +152,7 @@ plot <- ggplot(data, aes(x = year, y = Highest)) +
   scale_x_continuous(#limits = c(2006, 2018),
                      labels = c(2007, 2015, 2017),
                      breaks = c(2007, 2015, 2017) ,
-                     trans = squish_trans(2008,2014,3)) +
+                     trans = squish_trans(2008,2014,4)) +
   coord_cartesian(clip = "off") +
   annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
   annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
@@ -190,7 +190,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure3_ex4", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure3_ex5", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
