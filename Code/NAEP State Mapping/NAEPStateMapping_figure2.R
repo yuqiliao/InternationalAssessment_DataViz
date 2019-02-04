@@ -97,7 +97,7 @@ GeomCol$draw_key = draw_key_polygon3
 
 
 # plotting
-plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = year)) +
+plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = number)) +
  
   # add grouped bars
   geom_col(width = 0.7, position = position_dodge(width = 0.8)) +
@@ -114,7 +114,7 @@ plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = 
                      breaks = yAxisBreaks, expand = c(0,0)) +
   
   # add text/label
-  geom_text(colour = rev(data$yearCol), size = 3.5, position = position_dodge(width = 0.8), hjust = -0.1) +
+  geom_text(colour = rev(data$yearCol), size = 3.5, position = position_dodge(width = 0.8), hjust = -0.6) +
   
   # apply themes 
   theme_bw() + 
@@ -150,7 +150,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure2_ex3", ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
+postscript(paste0("./Results/", "figure2_ex4", ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
