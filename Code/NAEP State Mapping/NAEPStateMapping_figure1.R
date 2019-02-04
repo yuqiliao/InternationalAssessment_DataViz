@@ -60,12 +60,12 @@ gline <- linesGrob(y = c(0, 1),x = c(-.01, .01),  gp = gpar(col = "#2d2a26", lwd
 
 # define legend position on x axis & y axis
 numberSates <- length(data$St)
-xAxisPoint <- round(numberSates * 0.52)
+xAxisPoint <- round(numberSates * 0.54)
 yAxisPoint <- yAxisBreaksMin
 xAxisPointText <- xAxisPoint + 1
 yAxisPointText <- yAxisPoint
 
-xAxisErrorBar <- round(numberSates * 0.79)
+xAxisErrorBar <- round(numberSates * 0.8)
 yAxisErrorBarMin <- yAxisPoint - 2
 yAxisErrorBarMax <- yAxisPoint + 2
 xAxisErrorBarText <- xAxisErrorBar + 1
@@ -103,8 +103,8 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        axis.ticks.y=element_line(color="#2d2a26", size= 0.235),
                        axis.ticks.length = unit(7.3,"points"),
                        plot.title=element_text(family="Open Sans", size= 10 ,lineheight=2, 
-                                               color="#000000", face = "bold"),
-                       aspect.ratio = 3.718/7.5
+                                               color="#000000", face = "bold")
+                       #aspect.ratio = 3.718/8
                        )
 
 
@@ -200,7 +200,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure1_ex5", ".eps"), family = "Open Sans", width = 7.5, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure1_ex6", ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
