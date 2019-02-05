@@ -5,7 +5,7 @@
 
 
 ### Setting things up -----
-reqpkg <- c("dplyr", "ggplot2", "readxl", "grid", "grDevices", "showtext", "extrafont")
+reqpkg <- c("dplyr", "ggplot2", "readxl", "grid", "grDevices", "showtext", "extrafont", "scales")
 
 sapply(reqpkg, function(pkgi) {
   if (!pkgi %in% installed.packages()) {
@@ -130,7 +130,7 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
 plot <- ggplot(data, aes(x = year, y = Highest)) +
   # draw hlines and the shades between them
   #scale_x_discrete() +
-  geom_rect(aes(xmin = year-0.5, xmax = year+0.5, ymin = Lowest, ymax = Highest), fill = barCol) +
+  geom_rect(aes(xmin = year-0.3, xmax = year+0.3, ymin = Lowest, ymax = Highest), fill = barCol) +
   
   geom_text(aes(y = Highest + 6, label = round(Highest, 0)), family="Open Sans", color = "#000000", size = 3.5 ) +
   geom_text(aes(y = Lowest - 5, label = round(Lowest, 0)), family="Open Sans", color = "#000000", size = 3.5) +
@@ -190,7 +190,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure3_ex5", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure3_ex7", ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 

@@ -123,9 +123,9 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
            parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
   
   # draw error bars and point
-  geom_errorbar(aes(ymin = `Lower Cut`, ymax = `Upper Cut`), size = 0.47, color = "#001871") +
+  geom_errorbar(aes(ymin = `Lower Cut`, ymax = `Upper Cut`), size = 0.47, color = "#C69214") +
   geom_text(aes(y = `Lower Cut` - 2, label = St), family="Open Sans", color = "#000000", size = 2) +
-  geom_point(color = "#C69214", size = 1) +
+  geom_point(color = "#001871", size = 1) +
   
   # add lines for testing program benchmarks
   annotate("segment", x = SBACMin - 0.4, xend = SBACMax + 0.4, y = data$`Lower Cut`[SBACMin] - 5, yend = data$`Lower Cut`[SBACMin] - 5 , color = "#2d2a26", size = 0.235) +
@@ -137,16 +137,16 @@ plot <- ggplot(data, aes(x = St, y = midPoint)) +
            hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
   
   annotate("segment", x = PARCCMin - 0.4, xend = PARCCMax + 0.4, y = data$`Lower Cut`[PARCCMin] - 5, yend = data$`Lower Cut`[PARCCMin] - 5 , color = "#2d2a26", size = 0.235) +
-  annotate("text", x = PARCCMin + (PARCCMax - PARCCMin)/2, y = data$`Lower Cut`[PARCCMin] - 8, label = "PARCCM", 
+  annotate("text", x = PARCCMin + (PARCCMax - PARCCMin)/2, y = data$`Lower Cut`[PARCCMin] - 8, label = "PARCC", 
            hjust = 0.5, color = "#000000", size = 2.5, family="Open Sans") +
   
   
   # add legend (fake data)
-  geom_point(aes(x = xAxisPoint, y = yAxisPoint), color = "#C69214", size = 1) +
+  geom_point(aes(x = xAxisPoint, y = yAxisPoint), color = "#001871", size = 1) +
   annotate("text", x = xAxisPointText, y = yAxisPointText, family="Open Sans", 
             color = "#000000", size = 3.5, label = "NAEP equivalent score", hjust = 0) +
   geom_errorbar(aes( x = xAxisErrorBar, ymin = yAxisErrorBarMin, ymax = yAxisErrorBarMax), 
-                size = 0.47, color = "#001871") +
+                size = 0.47, color = "#C69214") +
   annotate("text", x = xAxisErrorBarText, y = yAxisErrorBarText, family="Open Sans", 
             color = "#000000", size = 3.5, label = "±2 standard errors", hjust = 0) +
   
@@ -200,7 +200,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure1_ex6", ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
+postscript(paste0("./Results/", "figure1_ex8", ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 

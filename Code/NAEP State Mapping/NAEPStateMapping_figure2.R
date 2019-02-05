@@ -70,7 +70,7 @@ theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
                        legend.key.height=unit(0.7,"line"),
                        legend.key.width=unit(0.7,"line"),
                        #legend.key.size = unit(2, "cm"),
-                       legend.text = element_text(size=10, family = "Open Sans"),
+                       legend.text = element_text(size=8, family = "Open Sans"),
                        legend.position = c(0.9, 0.85),
                        legend.box.background = element_blank()
                        #legend.box.margin = margin(0,0,0,0)
@@ -114,7 +114,7 @@ plot <- ggplot(data, aes(x = proficiencyLevel, y = number, fill = year, label = 
                      breaks = yAxisBreaks, expand = c(0,0)) +
   
   # add text/label
-  geom_text(data = data, mapping = aes(x = proficiencyLevel, y = number + 0.6), colour = rev(data$yearCol), size = 3.5, position = position_dodge(width = 0.8), hjust = 0) +
+  geom_text(data = data, mapping = aes(x = proficiencyLevel, y = number + 0.6), colour = rev(data$yearCol), size = 2.75, position = position_dodge(width = 0.8), hjust = 0) +
   
   # apply themes 
   theme_bw() + 
@@ -150,7 +150,7 @@ grid::grid.draw(g)
 loadfonts(device = "postscript")
 # save as
 setEPS()
-postscript(paste0("./Results/", "figure2_ex4", ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
+postscript(paste0("./Results/", "figure2_ex5", ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
 grid::grid.draw(g)
 dev.off()
 
