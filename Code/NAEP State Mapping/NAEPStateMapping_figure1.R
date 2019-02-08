@@ -225,7 +225,7 @@ for (tab in tabList){
   loadfonts(device = "postscript")
   # save as
   setEPS()
-  postscript(paste0("./Results/", tab, "-",today(), ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
+  postscript(paste0("./Results/", "figure1", tab, "-",today(), ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
   grid::grid.draw(g)
   dev.off()
   
