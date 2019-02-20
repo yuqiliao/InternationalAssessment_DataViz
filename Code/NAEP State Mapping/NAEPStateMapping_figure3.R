@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8AllBottom_yl.xlsx", sheet = tab)
+  data <- read_excel("./Materials/G4G8Figure3_190220_yl.xlsx", sheet = tab)
   
   # # add dummy data (years) for placeholder #decided to use scale_x_continuous for now so this is not needed
   # data <- data %>% 

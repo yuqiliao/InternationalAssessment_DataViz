@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8All for Test_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure1_190220_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
     #getting rid of irrelevant rows (if any)
     dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -33,7 +33,9 @@ for (tab in tabList){
     #calculate upperCut and lowerCut
     mutate(lowerCut = (`NSE` - `Band +/-`),
            upperCut = (`NSE` + `Band +/-`)) %>% 
-    rename(midPoint = `NSE`)
+    rename(midPoint = `NSE`) %>% 
+    # remove rows where midPoint is NA
+    dplyr::filter(!midPoint %in% NA)
   
   # define achievement level
   proficiencyLevelList <- read_excel("./Materials/G4G8All for Test_yl.xlsx", sheet = tab) %>%
@@ -82,13 +84,13 @@ for (tab in tabList){
   numberSates <- length(data$st)
   xAxisPoint <- round(numberSates * 0.54)
   yAxisPoint <- yAxisBreaksMin
-  xAxisPointText <- xAxisPoint + 1
+  xAxisPointText <- xAxisPoint + numberSates/52
   yAxisPointText <- yAxisPoint
   
   xAxisErrorBar <- round(numberSates * 0.8)
   yAxisErrorBarMin <- yAxisPoint - 2
   yAxisErrorBarMax <- yAxisPoint + 2
-  xAxisErrorBarText <- xAxisErrorBar + 1
+  xAxisErrorBarText <- xAxisErrorBar + numberSates/52
   yAxisErrorBarText <- yAxisPoint
   
   
