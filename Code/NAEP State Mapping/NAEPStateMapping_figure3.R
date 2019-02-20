@@ -14,7 +14,7 @@ sapply(reqpkg, function(pkgi) {
   library(pkgi, character.only = TRUE)
 })
 
-wd <- "G:/Data Science/GIT/InternationalAssessment_DataViz/Code/NAEP State Mapping"
+wd <- ".Code/NAEP State Mapping"
 
 setwd(wd)
 
