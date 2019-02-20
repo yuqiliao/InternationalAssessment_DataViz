@@ -156,8 +156,8 @@ for (tab in tabList){
     #scale_x_discrete() +
     geom_rect(aes(xmin = year-0.3, xmax = year+0.3, ymin = Lowest, ymax = Highest), fill = barCol) +
     
-    geom_text(aes(y = Highest + 6, label = round(Highest, 0)), family="Open Sans", color = "#000000", size = 3.5 ) +
-    geom_text(aes(y = Lowest - 5, label = round(Lowest, 0)), family="Open Sans", color = "#000000", size = 3.5) +
+    geom_text(aes(y = Highest + 6, label = round(Highest, 0)), family="Open Sans", color = barCol, size = 3.5 ) +
+    geom_text(aes(y = Lowest - 5, label = round(Lowest, 0)), family="Open Sans", color = barCol, size = 3.5) +
     geom_text(aes(y = Lowest + (Highest - Lowest)/2, label = round(range, 0)), family="Open Sans", fontface = "bold", color = "white", size = 3.5, vjust = 0.5) +
     
     # add axis titles
