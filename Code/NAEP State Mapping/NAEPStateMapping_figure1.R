@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure1_190220_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure1_190410_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
     #getting rid of irrelevant rows (if any)
     dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -59,6 +59,14 @@ for (tab in tabList){
   ACTMax <- tail(which(!is.na(data$`Consortia`) & data$`Consortia` %in% "ACT"),1)
   PARCCMin <- head(which(!is.na(data$`Consortia`) & data$`Consortia` %in% "PARCC"),1)
   PARCCMax <- tail(which(!is.na(data$`Consortia`) & data$`Consortia` %in% "PARCC"),1)
+  
+  # deal with special cases when the values have zero length (G8 Math)
+  if(length(PARCCMin) == 0) {
+    PARCCMin <- NA
+  }
+  if(length(PARCCMax) == 0) {
+    PARCCMax <- NA
+  }
     
   
   
