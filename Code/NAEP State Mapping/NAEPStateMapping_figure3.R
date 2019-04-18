@@ -23,7 +23,17 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure3_190220_yl.xlsx", sheet = tab)
+  data <- read_excel("./Materials/G4G8Figure3_190418_yl.xlsx", sheet = tab) %>% 
+  dplyr::select(`year`, `Highest`, `Lowest`, `range`)
+  
+  # define achievement level
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure3_190418_yl.xlsx", sheet = tab) %>% 
+    dplyr::select(`ProficiencyLevel`, `Value`) %>% 
+    na.omit() %>% 
+    pull()
+  
+  basic <- proficiencyLevelList[1]
+  proficient <- proficiencyLevelList[2]
   
   # # add dummy data (years) for placeholder #decided to use scale_x_continuous for now so this is not needed
   # data <- data %>% 
@@ -152,7 +162,29 @@ for (tab in tabList){
   
   # plotting
   plot <- ggplot(data, aes(x = year, y = Highest)) +
-    # draw hlines and the shades between them
+    
+    # add achievement level line
+    geom_hline(yintercept = basic, color = "#77787B", size = 0.235) +
+    geom_hline(yintercept = proficient, color = "#77787B", size = 0.235) +
+
+    # # add achievement level text - version 1
+    # # (normally the x position would be the center year (2007+2017)/2 = 2012, but because I use the squish_trans function later, here I have to manually adjust the x position to about 2014.2 to make it center. However I ended up using 2012 for now so the text is not overlapped with the bar )
+    # annotate("text", x = 2012, y = basic - 5, label = paste0("NAEP~italic(Basic)~(", basic, ")"),
+    #          parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    # annotate("text", x = 2012 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)~(", proficient, ")"),
+    #          parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    
+    
+    # add achievement level text - version 2
+    annotate("text", x = 2011, y = basic - 5, label = paste0("(", basic, ")"), 
+             parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    annotate("text", x = 2011, y = basic + 5, label = paste0("NAEP~italic(Basic)"), 
+             parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    annotate("text", x = 2011 , y = proficient - 5, label = paste0("(", proficient, ")"), 
+             parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    annotate("text", x = 2011 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)"), 
+             parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
+    
     #scale_x_discrete() +
     geom_rect(aes(xmin = year-0.3, xmax = year+0.3, ymin = Lowest, ymax = Highest), fill = barCol) +
     
