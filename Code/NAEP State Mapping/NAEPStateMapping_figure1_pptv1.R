@@ -26,7 +26,7 @@ yearList <- c("2017", "2015", "2007")
 for (tab in tabList){
   # read in data_2017, data_2015, and data_2007 for each grade/subject combination
   for (year in yearList) {
-    data <- read_excel("./Materials/G4G8Figure1_190425_ppt.xlsx", sheet = paste0(tab, "_", year)) %>% 
+    data <- read_excel("./Materials/G4G8Figure1_190506_ppt.xlsx", sheet = paste0(tab, "_", year)) %>% 
       dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
       #getting rid of irrelevant rows (if any)
       dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -57,18 +57,18 @@ for (tab in tabList){
     # define colors based on subject and year (alpha is not support when exporting as eps, so have to define specific hex codes)
     if ( grepl("R", tab) ) {
       pointCol_2017 <- "#001871"
-      errorBarCol_2017 <- "#C69214"
+      lineCol_2017 <- "#001871"
       pointCol_2015 <- "#685da0"
-      errorBarCol_2015 <- "#dfb56a"
+      lineCol_2015 <- "#685da0"
       pointCol_2007 <- "#b3aacf"
-      errorBarCol_2007 <- "#f3d9b4"
+      lineCol_2007 <- "#b3aacf"
     } else {
-      pointCol_2017 <- "#001871"
-      errorBarCol_2017 <- "#007167"
-      pointCol_2015 <- "#685da0"
-      errorBarCol_2015 <- "#699f97"
-      pointCol_2007 <- "#b3aacf"
-      errorBarCol_2007 <- "#b3ceca"
+      pointCol_2017 <- "#C69214"
+      lineCol_2017 <- "#C69214"
+      pointCol_2015 <- "#dfb56a"
+      lineCol_2015 <- "#dfb56a"
+      pointCol_2007 <- "#f3d9b4"
+      lineCol_2007 <- "#f3d9b4"
     }
   }
 
@@ -239,10 +239,10 @@ for (tab in tabList){
     annotation_custom(gline, ymin= yAxisBreaksMax - 2, ymax= yAxisBreaksMax, xmin= -Inf, xmax= Inf) + 
     annotation_custom(gline, ymin= yAxisBreaksMax, ymax= yAxisBreaksMax + 2, xmin= -Inf, xmax= Inf) 
   
-  # add error bars and points
-  # draw error bars and point - 2007
+  # add lines and points
+  # draw lines and point - 2007
   plot_2007 <- plot +     
-    geom_errorbar(data = data_2007, aes(x = orderNumber, ymin = `lowerCut`, ymax = `upperCut`), size = 0.47, color = errorBarCol_2007) +
+    geom_line(data = data_2007, aes(x = orderNumber, y = midPoint, group = 1), size = 0.47, color = lineCol_2007) +
     geom_point(data = data_2007, aes(x = orderNumber, y = midPoint), color = pointCol_2007, size = 1)
   
   # move title to the left
@@ -278,7 +278,7 @@ for (tab in tabList){
   
   # draw error bars and point - 2015
   plot_2015 <- plot_2007 +     
-    geom_errorbar(data = data_2015, aes(x = orderNumber, ymin = `lowerCut`, ymax = `upperCut`), size = 0.47, color = errorBarCol_2015) +
+    geom_line(data = data_2015, aes(x = orderNumber, y = midPoint, group = 1), size = 0.47, color = lineCol_2015) + 
     geom_point(data = data_2015, aes(x = orderNumber, y = midPoint), color = pointCol_2015, size = 1)
   
   # move title to the left
@@ -296,7 +296,7 @@ for (tab in tabList){
   
   # draw error bars and point - 2017
   plot_2017 <- plot_2015 +     
-    geom_errorbar(data = data_2017, aes(x = orderNumber, ymin = `lowerCut`, ymax = `upperCut`), size = 0.47, color = errorBarCol_2017) +
+    geom_line(data = data_2017, aes(x = orderNumber, y = midPoint, group = 1), size = 0.47, color = lineCol_2017) + 
     geom_point(data = data_2017, aes(x = orderNumber, y = midPoint), color = pointCol_2017, size = 1)
   
   # move title to the left
