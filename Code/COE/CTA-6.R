@@ -28,6 +28,10 @@ sapply(reqpkg, function(pkgi) {
 # inspect the working directory
 here()
 
+#load font
+#font_import() #run only once
+#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
+
 
 ### Read in data  -----
 # the data has already been processed, based on the raw data from "tabn322.40.xls" and "tabn322.50.xls"
@@ -51,7 +55,7 @@ data$Category <- factor(data$Category, levels = order)
 
 
 # Define order for `Gender`
-data$Gender <- factor(data$Gender, labels = c("Female","Male"))
+data$Gender <- factor(data$Gender, labels = c(" Female "," Male  "))
 
 
 # fix labels
@@ -69,8 +73,8 @@ data$labelNormal <- as.character(ifelse(data$Percent <= pushAsideThreshold, "", 
 cols <- c("#fbab18", "#3EC7F4")
 
 data1 <- data %>% mutate(Percent = 0, df_id = "1") 
-data2 <- data1 %>% mutate(Percent = ifelse(Gender %in% c("Male"), data$Percent, data1$Percent), df_id = "2")
-data3 <- data2 %>% mutate(Percent = ifelse(Gender %in% c("Female"), data$Percent, data2$Percent), df_id = "3")
+data2 <- data1 %>% mutate(Percent = ifelse(Gender %in% c(" Male  "), data$Percent, data1$Percent), df_id = "2")
+data3 <- data2 %>% mutate(Percent = ifelse(Gender %in% c(" Female "), data$Percent, data2$Percent), df_id = "3")
 
 ls <- list(data1, data2, data3)
 
@@ -82,7 +86,7 @@ plotBreakLabel = c("0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%",
 
 
 # define title/caption, etc.
-plotCaption <- expression(atop('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.                                                               ','SOURCE: International Association for the Evaluation of Educational Achievement (IEA), Progress in International Reading Literacy Study (PIRLS), 2016.'))
+plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), ', 'Fall 2016 and Fall 2017, Completions component.                                                                                                                                                                     '))
 
 # plotCaption <- list()
 # plotNote <- expression(paste("NOTE: Education systems are ordered by the percentage of students reaching the ", italic("Advanced")," international benchmark."))
@@ -96,7 +100,7 @@ plotCaption <- expression(atop('NOTE: Education systems are ordered by the perce
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Field of study"
 
-plotTitle <- c("Figure CTA-6. Percentage distribution of bachelor's degrees \nconferred by postsecondary institutions in selected \nfields of study, by sex: Academic year 2016-17")
+plotTitle <- c("Percentage distribution of bachelor's degrees conferred by postsecondary \ninstitutions in selected fields of study, by sex: Academic year 2016-17")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
@@ -105,18 +109,18 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      panel.background=element_blank(),
                      panel.border=element_rect(color="transparent"),
                      panel.grid = element_blank(),
-                     axis.title.x=element_text(size=18, margin = margin(t=15, b = 5), hjust = .5),
+                     axis.title.x=element_text(size=20, margin = margin(t=15, b = 5), hjust = .5),
                      #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
-                     axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "Calibri"),
-                     axis.text.y=element_text(size=22, hjust = 1, family = "Calibri", face = "bold", color = "black"),
+                     axis.text.x=element_text(size=20, angle = 0, hjust = 0.5, family = "Calibri Light"),
+                     axis.text.y=element_text(size=22, hjust = 1, family = "Calibri Light", face = "bold"),
                      axis.line.x = element_line(size = 1),
                      axis.line.y = element_blank(),
                      axis.ticks.x = element_line(size = 1),
                      axis.ticks.length =  unit(.25, "cm"),
                      axis.ticks.y = element_blank(),
-                     plot.title=element_text(size=35,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=25,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5)),
-                     plot.caption=element_text(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
+                     plot.title=element_text(size=34,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
+                     plot.subtitle=element_text(size=26,family = "Calibri", face = "plain" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5)),
+                     plot.caption=element_text(size=18, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
                      legend.justification = "left",
@@ -248,7 +252,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_v1.gif"),interval = .02, ani.width = 1080, ani.height = 900)
+movie.name=here("Code", "COE", "Results", "CTA-6_v2.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 
 

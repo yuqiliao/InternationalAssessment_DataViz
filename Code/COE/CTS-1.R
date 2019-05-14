@@ -28,6 +28,10 @@ sapply(reqpkg, function(pkgi) {
 # inspect the working directory
 here()
 
+#load font
+#font_import() #run only once
+#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
+
 
 ### Read in data  -----
 # the data has already been processed, based on the raw data from "tabn318.40.xls"
@@ -61,7 +65,7 @@ myf<-function(mystate){as.data.frame(df[df$Year==as.Date(mystate),])}
 my.list1<-lapply(states1,myf)
 
 # Apply tweenr: this adds in values between our data points to "smooth" the line
-tf <- tween_states(my.list1, tweenlength= 1, statelength=0, ease='linear',nframes=80)
+tf <- tween_states(my.list1, tweenlength= 1, statelength=0, ease='linear',nframes=160)
 tf$Year <- as.Date(tf$Year,"%Y")
 
 # needed to add in last 5 data points so that they match exactly the final year
@@ -93,38 +97,40 @@ cols <- c("#fbab18", "#3EC7F4", "#3FA66C","#242953", "#fb3a18")
 
 
 # define title/caption, etc.
-plotCaption <- expression(atop('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.                                                               ','SOURCE: International Association for the Evaluation of Educational Achievement (IEA), Progress in International Reading Literacy Study (PIRLS), 2016.'))
+plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),',"Fall 2001 through Fall 2017, Completions component. See,"~italic("Digest of Education Statistics 2018")~', Table 318.40.                                                        '))
+
+
 
 # plotCaption <- list()
-# plotNote <- expression(paste("NOTE: Education systems are ordered by the percentage of students reaching the ", italic("Advanced")," international benchmark."))
+# plotNote <- expression('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.')
 # plotSource <- c("\nSOURCE: International Association for the Evaluation of Educational Achievement (IEA), Progress in International Reading Literacy Study (PIRLS), 2016.")
 # plotCaption <- c(plotNote, plotSource)
 # plotCaption <- paste(plotCaption, collapse = "\n")
 # 
-# plotCaption <- getWrappedText(plotCaption, width = 400, ps = 10)
-# 
+# plotCaption <- getWrappedText(plotCaption, width = 1000, ps = 10)
+
 
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Number"
 
-plotTitle <- c("Figure CTS-1. Number of certificates and degrees conferred by postsecondary \ninstitutions: Academic years 2000-01 through 2016-17")
+plotTitle <- c("Number of certificates and degrees conferred by postsecondary institutions: \nAcademic years 2000-01 through 2016-17")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
 theme_white <- theme(text = element_text(family="Calibri", color = "black"),
                      panel.grid = element_blank(), panel.border = element_blank(),
                      axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5),
-                     axis.text.x=element_text(size=22, angle = 0, hjust = 1, family = "Calibri"),
-                     axis.text.y=element_text(size=22, family = "Calibri"),
-                     axis.line.x=element_line(size = 1),
-                     axis.line.y=element_line(size = 1),
+                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "Calibri Light"),
+                     axis.text.y=element_text(size=22, family = "Calibri Light"),
+                     #axis.line.x=element_line(size = 1),
+                     #axis.line.y=element_line(size = 1),
                      axis.ticks.x = element_blank(),  
-                     axis.ticks.y = element_line(size = 1),
+                     axis.ticks.y = element_blank(),
                      plot.title=element_text(size=31,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "Calibri"),
-                     plot.caption=element_text(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
-                     strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "Calibri Light"),
-                     strip.background = element_rect(fill = "#f1f1f1", colour = NA),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "Calibri", face = "plain"),
+                     plot.caption=element_text(size=18, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
+                     #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "Calibri Light"),
+                     #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
                      legend.position="none"
 )
 
@@ -174,16 +180,22 @@ wholeFig <- ggplot(tf, aes(x = Year, y = Value)) +
   #           family="Calibri") +
   theme_minimal() + theme_white + 
   scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
-  labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, 
-       caption = plotCaption) +
+  labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
   geom_dl(data = tf,
           aes(label = Category), method = list("last.points", cex = 2, hjust = -0.5))
 
+wholeFig
 
 
-
-
-
+# the below code to change plot layout (for better alignment) won't work with gganimate, so give up the gganimate for now
+grid.newpage()
+# ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
+g <- ggplotGrob(wholeFig)
+g$layout$l[g$layout$name == "title"] <- 4
+g$layout$l[g$layout$name == "caption"] <- 4
+g$layout$l[g$layout$name == "subtitle"] <- 4
+#g$layout$l[g$layout$name == "guide-box"] <- 4
+grid::grid.draw(g);
 
 
 
@@ -211,7 +223,7 @@ gifReplicate <- function(x) {
   grid.draw(x)
 }
 
-# version 1 - pause in each year (and draw dots)
+# version 1 - pause in each year (and draw dots) - not used =====
 saveGIF({
   print(Sys.time())
   for (i in 1:max(tf$.frame)) {
@@ -280,7 +292,7 @@ saveGIF({
 movie.name=here("Code", "COE", "Results", "CTS-1_v1.gif"),interval = .02, ani.width = 1200, ani.height = 1000)
 
 
-# version 2 - pause only at begining and end
+# version 2 - pause only at begining and end =====
 saveGIF({
   print(Sys.time())
   for (i in 1:max(tf$.frame)) {
@@ -307,11 +319,14 @@ saveGIF({
     Current_years <- unique(subset(tf, .frame <= i)$Year)
     a <- X_axis_years %in% Current_years
     
-    # when i == 1, add the geom_point
-    if(i==1){
-      g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[a]),aes(group=Category, color=Category), size=6)
-      
+    # add the geom_point for the first year (for all years)
+    g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[1]),aes(group=Category, color=Category), size=6)
+    
+    # add the geom_point for the last year (if i is the last frame)
+    if(i == max(tf$.frame)) {
+      g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[length(X_axis_years)]),aes(group=Category, color=Category), size=6)
     }
+    
     # # add geom_text to g based on i
     # geom_text(data = subset(tf, Year %in% X_axis_years[a]), size = 9, 
     #           aes(label = round(Value, 0)),
@@ -320,10 +335,18 @@ saveGIF({
     #           family="Calibri")
     
     #grob
+    # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
     plot <- ggplotGrob(g)
+    plot$layout$l[plot$layout$name == "title"] <- 4
+    plot$layout$l[plot$layout$name == "caption"] <- 4
+    plot$layout$l[plot$layout$name == "subtitle"] <- 4
+    #plot$layout$l[plot$layout$name == "guide-box"] <- 4
+
+    
+    
     
     # define object that store the name of frame with which we want the plot to "pause" (in this case, only pause at the beginning and the end)
-    pause_frames <- c(1,81)
+    pause_frames <- c(max(tf$.frame))
     
     
     
@@ -333,10 +356,10 @@ saveGIF({
       # replicate (and draw) the plot many times
       grid::grid.draw(plot);
       # let the last plot pause a bit more
-      if (i == pause_frames[length(pause_frames)]){
+      if (i == pause_frames){
         replicate(200,gifReplicate(plot))
       } else {
-        replicate(30,gifReplicate(plot))
+        replicate(3,gifReplicate(plot)) #it doesn't apply here
       }
       
     } else {
@@ -350,7 +373,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_v2.gif"),interval = .02, ani.width = 1200, ani.height = 1000)
+movie.name=here("Code", "COE", "Results", "CTS-1_v2_2.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 
 
