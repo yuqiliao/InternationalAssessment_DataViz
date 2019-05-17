@@ -16,7 +16,7 @@
 # library(cowplot)
 
 # define and load all packages
-reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "ggplotify", "here", "stringr", "readxl")
+reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "here", "stringr", "readxl")
 
 sapply(reqpkg, function(pkgi) {
   if (!pkgi %in% installed.packages()) {
@@ -82,11 +82,11 @@ tf <- tween_states(ls, tweenlength= 1, statelength=0, ease='cubic-in-out',nframe
 
 # define breaks
 plotBreak = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-plotBreakLabel = c("0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%")
-
+#plotBreakLabel = c("0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%")
+plotBreakLabel = plotBreak
 
 # define title/caption, etc.
-plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), ', 'Fall 2016 and Fall 2017, Completions component.                                                                                                                                                                     '))
+plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), ', 'Fall 2017, Completions component. See'~italic('Digest of Education Statistics 2018,')~' tables 322.40 and 322.50.                                                                  '))
 
 # plotCaption <- list()
 # plotNote <- expression(paste("NOTE: Education systems are ordered by the percentage of students reaching the ", italic("Advanced")," international benchmark."))
@@ -123,7 +123,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      plot.caption=element_text(size=18, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
-                     legend.justification = "left",
+                     legend.justification = "center",
                      legend.box.just = "left",
                      legend.title = element_blank(),
                      #legend.spacing = unit(c(1), "line"),
@@ -252,7 +252,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_v2.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTA-6_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 
 
