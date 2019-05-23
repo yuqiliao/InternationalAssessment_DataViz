@@ -109,17 +109,17 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      panel.background=element_blank(),
                      panel.border=element_rect(color="transparent"),
                      panel.grid = element_blank(),
-                     axis.title.x=element_text(size=20, margin = margin(t=15, b = 5), hjust = .5),
+                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, color = "#686868"),
                      #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
                      axis.text.x=element_text(size=20, angle = 0, hjust = 0.5, family = "Calibri Light"),
-                     axis.text.y=element_text(size=22, hjust = 1, family = "Calibri Light", face = "bold"),
-                     axis.line.x = element_line(size = 1),
+                     axis.text.y=element_text(size=22, hjust = 1, family = "Calibri", face = "plain", color = "black"),
+                     axis.line.x = element_line(size = 1, color = "#686868"),
                      axis.line.y = element_blank(),
-                     axis.ticks.x = element_line(size = 1),
+                     axis.ticks.x = element_line(size = 1, "#686868"),
                      axis.ticks.length =  unit(.25, "cm"),
                      axis.ticks.y = element_blank(),
                      plot.title=element_text(size=34,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26,family = "Calibri", face = "plain" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5)),
+                     plot.subtitle=element_text(size=26,family = "Calibri Light", face = "plain" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5), color = "#686868"),
                      plot.caption=element_text(size=18, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
@@ -252,7 +252,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTA-6_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 
 
