@@ -16,7 +16,7 @@
 # library(cowplot)
 
 # define and load all packages
-reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "here", "stringr", "readxl")
+reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "here", "stringr", "readxl", "cowplot")
 
 sapply(reqpkg, function(pkgi) {
   if (!pkgi %in% installed.packages()) {
@@ -158,7 +158,7 @@ plot
 
 
 # the below code to change plot layout (for better alignment) won't work with gganimate, so give up the gganimate for now
-grid.newpage()
+#grid.newpage()
 # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
 g <- ggplotGrob(plot)
 g$layout$l[g$layout$name == "title"] <- 4
@@ -184,11 +184,11 @@ grid::grid.draw(g);
 # anim_save(filename = "pirls.gif", animation = last_animation())
 # clean the original data frame
 
-# function to draw the same figure n-many times, so that the animation "pauses"
-gifReplicate <- function(x) {
-  grid.newpage()
-  grid.draw(x)
-}
+# # function to draw the same figure n-many times, so that the animation "pauses"
+# gifReplicate <- function(x) {
+#   grid.newpage()
+#   grid.draw(x)
+# }
 
 
 # create GIF - version: pause in each year ----- 
@@ -224,126 +224,47 @@ saveGIF({
     g$layout$l[g$layout$name == "caption"] <- 4
     g$layout$l[g$layout$name == "subtitle"] <- 4
     #g$layout$l[g$layout$name == "guide-box"] <- 4
-    grid::grid.draw(g);
-    grid.newpage()
+    
+    # if i <= 51 (aka when i is still showing the first level "Male"), cover the legend box for "Female"
+    if (i <= 51) {
+      
+      g2 <- ggdraw(g) + 
+        geom_rect(aes(xmin = 0.58, xmax = 0.68, ymin = 0.1, ymax = 0.15),
+                  colour = "white", fill = "white")
+    } else {
+      g2 <- ggdraw(g)
+    }
+
+    # grid::grid.draw(g);
+    # grid.newpage()
     
     # define object that store the name of frame with which we want the plot to "pause"
    # pause_frames <- tf %>% group_by(df_id) %>% slice(max(row_number(.frame))) %>% pull(.frame) #this is not correct it turns out
     pause_frames <- c(51, 100)
     
+   
+    
     # draw the plot
     if (i %in% pause_frames){
       # replicate (and draw) the plot many times
-      grid::grid.draw(g);
+      #grid::grid.draw(g2);
       # let the last plot pause a bit more
       if (i == pause_frames[length(pause_frames)]){
-        replicate(200,gifReplicate(g))
+        replicate(200, grid::grid.draw(g2))
       } else {
-        replicate(30,gifReplicate(g))
+        replicate(30, grid::grid.draw(g2))
       }
       
     } else {
-      # just draw the plot one time
-      grid::grid.draw(g);
-      grid.newpage()
+      # just draw the plot one time 
+      grid::grid.draw(g2)
     }
     
   }
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
-
-
-
-
-
-# create GIF - version: pause at start/end (not used)----- 
-saveGIF({
-  print(Sys.time())
-  firstFig <-  ggplot(data = tf, mapping = aes(x = Category, y = Percent)) +
-    geom_col(data = subset(tf, .frame == min(.frame)), 
-             aes(fill = Gender),
-             width = 0.6)  +
-    scale_fill_manual(values = cols, breaks = rev(levels(data$Gender))) + 
-    coord_flip(clip = "off") +
-    scale_y_continuous(breaks = plotBreak,
-                       labels = plotBreakLabel,
-                       expand = c(0, 0, 0, 0),
-                       limits = c(0,100)) +
-    labs(x = "", y = "Percent", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
-    theme_bw() +
-    theme_white 
-  
-  # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
-  g <- ggplotGrob(firstFig)
-  g$layout$l[g$layout$name == "title"] <- 4
-  g$layout$l[g$layout$name == "caption"] <- 4
-  g$layout$l[g$layout$name == "subtitle"] <- 4
-  #g$layout$l[g$layout$name == "guide-box"] <- 4
-  grid::grid.draw(g);
-  
-  # replicate the same figure n-many times, so that the animation "pauses" 
-  replicate(30,gifReplicate(g))
-  grid.newpage()
-  
-  # from the 1st to the max frame of the full length of the data set, take the i-th value and generate a visualization
-  for (i in 1:max(tf$.frame)) {
-    print(paste0("working on the ", i, "th frame"))
-    g <- ggplot(data = subset(tf, .frame == i), mapping = aes(x = Category, y = Percent, .frame = i)) +
-      geom_col(aes(fill = Gender),
-               width = 0.6)  +
-      scale_fill_manual(values = cols, breaks = rev(levels(data$Gender))) + 
-      coord_flip(clip = "off") +
-      scale_y_continuous(breaks = plotBreak,
-                         labels = plotBreakLabel,
-                         expand = c(0, 0, 0, 0),
-                         limits = c(0,100)) +
-      labs(x = "", y = "Percent", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
-      theme_bw() +
-      theme_white 
-    
-    g <- ggplotGrob(g)
-    g$layout$l[g$layout$name == "title"] <- 4
-    g$layout$l[g$layout$name == "caption"] <- 4
-    g$layout$l[g$layout$name == "subtitle"] <- 4
-    #g$layout$l[g$layout$name == "guide-box"] <- 4
-    grid::grid.draw(g);
-    grid.newpage()
-    
-  }
-  
-  # the full figure
-  wholeFig <- ggplot(data = tf, mapping = aes(x = Category, y = Percent)) +
-    geom_col(data = subset(tf, .frame == max(.frame)), 
-             aes(fill = Gender),
-             width = 0.6)  +
-    scale_fill_manual(values = cols, breaks = rev(levels(data$Gender))) + 
-    coord_flip(clip = "off") +
-    scale_y_continuous(breaks = plotBreak,
-                       labels = plotBreakLabel,
-                       expand = c(0, 0, 0, 0),
-                       limits = c(0,100)) +
-    labs(x = "", y = "Percent", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
-    theme_bw() +
-    theme_white 
-  
-  # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
-  g <- ggplotGrob(wholeFig)
-  g$layout$l[g$layout$name == "title"] <- 4
-  g$layout$l[g$layout$name == "caption"] <- 4
-  g$layout$l[g$layout$name == "subtitle"] <- 4
-  #g$layout$l[g$layout$name == "guide-box"] <- 4
-  grid::grid.draw(g);
-  
-  # replicate the same figure n-many times, so that the animation "pauses" 
-  replicate(250,gifReplicate(g))
-  print(Sys.time())
-},
-# specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name="experiment.gif",interval = .02, ani.width = 1200, ani.height = 1000)
-
-
+movie.name=here("Code", "COE", "Results", "CTA-6_v8.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my temporal solution is to manually delete the first blank frame in Photoshop after the gif is generated.
 
 
 
