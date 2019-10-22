@@ -59,7 +59,7 @@ myf<-function(mystate){as.data.frame(df[df$Year==as.Date(mystate),])}
 my.list1<-lapply(states1,myf)
 
 # Apply tweenr: this adds in values between our data points to "smooth" the line
-tf <- tween_states(my.list1, tweenlength= 1, statelength=0, ease='linear',nframes=160)
+tf <- tween_states(my.list1, tweenlength= 1, statelength=0, ease='linear',nframes=400)
 tf$Year <- as.Date(tf$Year,"%Y")
 
 # needed to add in last 3 data points so that they match exactly the final year
@@ -259,7 +259,7 @@ saveGIF({
     
     
     # # add geom_point to g based on i
-    # X_axis_years <- unique(df$Year)
+    X_axis_years <- unique(df$Year)
     # Current_years <- unique(subset(tf, .frame <= i)$Year)
     # a <- X_axis_years %in% Current_years
     
