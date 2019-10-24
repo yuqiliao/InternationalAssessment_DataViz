@@ -30,7 +30,6 @@ here()
 
 #load font
 #font_import() #run only once
-#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
 
 
 ### Read in data  -----
@@ -133,19 +132,19 @@ plotTitle <- c("Status dropout rates of 16- to 24-year-olds, by race/ethnicity:\
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
-theme_white <- theme(text = element_text(family="Calibri", color = "black"),
+theme_white <- theme(text = element_text(family="Gotham-Book", color = "black"),
                      panel.grid = element_blank(), panel.border = element_blank(),
-                     axis.title.x=element_text(size=34, margin = margin(t=15, b = 5), hjust = .5),
-                     axis.text.x=element_text(size=24, angle = 0, hjust = 0.3, family = "Calibri Light"),
-                     axis.text.y=element_text(size=24, family = "Calibri Light"),
+                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5),
+                     axis.text.x=element_text(size=20, angle = 0, hjust = 0.3, family = "Gotham-Light"),
+                     axis.text.y=element_text(size=20, family = "Gotham-Light"),
                      #axis.line.x=element_line(size = 1),
                      #axis.line.y=element_line(size = 1),
                      axis.ticks.x = element_blank(),  
                      axis.ticks.y = element_blank(),
-                     plot.title=element_text(size=40,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=28, margin = margin(t=15, b = 5),family = "Calibri", face = "plain"),
-                     plot.caption=element_text(size=22, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
-                     #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "Calibri Light"),
+                     plot.title=element_text(size=30,family = "Gotham-Bold", hjust= 0,lineheight=1, margin = margin(t = 15)),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "Gotham-Book", face = "plain"),
+                     plot.caption=element_text(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Gotham-Book"),
+                     #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "Gotham-Light"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
                      legend.position="none"
 )
@@ -186,12 +185,12 @@ yAxisLimits <- c(0,max(yAxisBreaks)* 1.03)
 #   #           aes(label = round(Value, 0)),
 #   #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y,
 #   #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x,
-#   #           family="Calibri") +
+#   #           family="Gotham-Book") +
 #   # geom_text(data = subset(tf, .frame == max(.frame)), size = 9,
 #   #           aes(label = round(Value, 0)),
 #   #           nudge_y = subset(tf, .frame == max(.frame))$nudge_y,
 #   #           nudge_x= subset(tf, .frame == max(.frame))$nudge_x,
-#   #           family="Calibri") +
+#   #           family="Gotham-Book") +
 #   theme_minimal() + theme_white +
 #   scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
 #   labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
@@ -276,7 +275,7 @@ saveGIF({
     #           aes(label = round(Value, 0)),
     #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
     #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
-    #           family="Calibri")
+    #           family="Gotham-Book")
     
     #grob
     # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
@@ -319,7 +318,14 @@ saveGIF({
 # specify the pathway and name of the gif output, as well as the interval, width, and height
 movie.name=here("Code", "Annual Report", "Results", "tabn219.70line.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
+gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
+  command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)
+  system.fun <- if (.Platform$OS.type == "windows") shell else system
+  if(show) message("Executing: ", strwrap(command, exdent = 2, prefix = "\n"))
+  system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
+}
 
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.70line.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.70line_compressed.gif")
 
 
 #  # version 1 - pause in each year (and draw dots) - not used =====
@@ -355,7 +361,7 @@ movie.name=here("Code", "Annual Report", "Results", "tabn219.70line.gif"),interv
 #     #           aes(label = round(Value, 0)),
 #     #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
 #     #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
-#     #           family="Calibri")
+#     #           family="Gotham-Book")
 #     
 #     #grob
 #     plot <- ggplotGrob(g)
