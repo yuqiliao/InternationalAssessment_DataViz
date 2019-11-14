@@ -128,7 +128,7 @@ plotCaption <- expression("SOURCE: U.S. Department of Commerce, Census Bureau, C
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Percent"
 
-plotTitle <- c("Status completion rates of 18- to 24-year-olds, by race/ethnicity:\n1977 through 2017")
+plotTitle <- c("High school status completion rates of 18- to 24-year-olds, \nby race/ethnicity: 1977 through 2017")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
