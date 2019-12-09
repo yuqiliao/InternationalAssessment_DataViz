@@ -120,7 +120,7 @@ saveGIF({
                                " 80 percent to less\n than 90 percent", " 90 percent or higher"),
                           breaks = c(1:5))
     ggMap <- ggMap + 
-      labs(x=NULL, y=NULL,title = NULL,caption = 'SOURCE: U.S. Department of Education, Office of Elementary and Secondary Education, Consolidated State\nPerformance Report, 2010\u201311 through 2017\u201318') +
+      labs(x=NULL, y=NULL,title = NULL,caption = 'SOURCE: U.S. Department of Education, Office of Elementary and Secondary Education, Consolidated State\nPerformance Report, 2010\u201311 through 2017\u201318.') +
       coord_map() + theme_bw()  + theme(plot.title=element_blank()) +
       theme(plot.caption=element_text(size=15, hjust=0, margin=margin(t= 15),lineheight=1.05, family = "Gotham-Book", color = "#242953")) +
       theme(panel.border=element_blank()) +
