@@ -1,6 +1,6 @@
 ### Annual report indicators data viz
 ### This is to be used as a gif tweet (animated map) for the NCES handle (based on Michael's code)
-### 10/22/19
+### 12/09/19 was given updated 2018 data, thus need to update the gif accordingly
 ### Yuqi Liao
 
 ### Set things up ------
@@ -20,7 +20,7 @@ here()
 setwd(here("Code", "Annual Report", "Materials"))
 #setwd("/home/michael/Documents/NCESgifs/mapGraduationRate")
 
-dat <- read_excel(path = here("Code", "Annual Report", "Materials", "tabn219.46map_clean.xlsx"),
+dat <- read_excel(path = here("Code", "Annual Report", "Materials", "tabn219.46map18updated_clean.xlsx"),
                  sheet = "processed") 
 dat <- dat %>% gather(Year, Percent, -State) %>% group_by(State)
 colnames(dat)[2:3] <- c("Year","Percent")
@@ -120,9 +120,9 @@ saveGIF({
                                " 80 percent to less\n than 90 percent", " 90 percent or higher"),
                           breaks = c(1:5))
     ggMap <- ggMap + 
-      labs(x=NULL, y=NULL,title = NULL,caption = 'SOURCE: U.S. Department of Education, Office of Elementary and Secondary Education, Consolidated State\nPerformance Report, 2010\u201311 through 2016\u201317') +
+      labs(x=NULL, y=NULL,title = NULL,caption = 'SOURCE: U.S. Department of Education, Office of Elementary and Secondary Education, Consolidated State\nPerformance Report, 2010\u201311 through 2017\u201318') +
       coord_map() + theme_bw()  + theme(plot.title=element_blank()) +
-      theme(plot.caption=element_text(size=15, hjust=0, margin=margin(t= 15),lineheight=1.05, face = "italic", family = "Gotham-Book", color = "#242953")) +
+      theme(plot.caption=element_text(size=15, hjust=0, margin=margin(t= 15),lineheight=1.05, family = "Gotham-Book", color = "#242953")) +
       theme(panel.border=element_blank()) +
       theme(panel.grid=element_blank()) +
       theme(axis.ticks=element_blank()) +
@@ -131,7 +131,7 @@ saveGIF({
       theme(panel.background=element_rect(fill="#e0eaef")) + 
       theme(legend.background=element_rect(fill="#e0eaef")) + 
       theme(legend.text = element_text(size=15.5, color = "#242953", family = "Gotham-Book", lineheight = )) +
-      theme(legend.title = element_text(size=18,family = "Gotham-Book", color = "#242953")) +
+      theme(legend.title = element_text(size=18,family = "Gotham-Bold", color = "#242953")) +
       theme(legend.key.size = unit(2, 'lines')) +
       theme(legend.position=c(0.91, 0.2)) + theme(legend.direction="vertical") +
       theme(legend.key = element_rect(size = 5)) +
@@ -142,10 +142,10 @@ saveGIF({
 
     ggDots <- ggplot(tf2, aes(Year,line)) + geom_point(data = subset(tf2, .frame == i), aes(frame = Year),color = "#3ec7f4", size = 8) +
       geom_path(data = yearData, aes(Year), color = "#242953") + geom_linerange(data = yearData,aes(ymin = lower, ymax = upper), color = "#242953") +
-      labs(x=NULL, y=NULL, title = "Adjusted cohort graduation rate (ACGR) of public high school\nstudents, by state: 2010\u201311 through 2016\u201317") +
-      geom_text(data = yearData,aes(label = paste0(yearz,"\u2013", substr(yearz + 1, 3,4))), color = "#242953", size = 5.2, vjust = -1.5,family = "Gotham-Book") +
+      labs(x=NULL, y=NULL, title = "Adjusted cohort graduation rate (ACGR) of public high school\nstudents, by state: 2010\u201311 through 2017\u201318") +
+      geom_text(data = yearData,aes(label = paste0(yearz,"\u2013", substr(yearz + 1, 3,4))), color = "#242953", size = 5.2, vjust = -1.5,family = "Gotham-Bold") +
       scale_y_continuous(limits = 1 + c(-.05, .2)) +
-      theme(plot.title = element_text(size=28, vjust= .5, margin=margin(b= 20), color = "#242953", family = "Gotham-Book")) +
+      theme(plot.title = element_text(size=28, vjust= .5, margin=margin(b= 20), color = "#242953", family = "Gotham-Bold")) +
       theme(panel.background=element_rect(fill="#e0eaef")) + theme(plot.background=element_rect(fill="#e0eaef")) + theme(panel.grid=element_blank()) +theme(axis.ticks=element_blank()) +
       theme(axis.text=element_blank()) 
     
@@ -156,7 +156,9 @@ saveGIF({
     mapFrame <- gtable_frame(map, width = unit(34,"cm"), height = unit(10, "cm"), debug = FALSE)
     timeLineFrame <- gtable_frame(timeLine, width = unit(34,"cm"), height = unit(1.8, "cm"), debug = FALSE)
     
-    grid.newpage()
+    if (i != 1) {
+      grid.newpage()
+    }
     grid.draw(rectGrob(gp=gpar(fill="#e0eaef", lwd = 0)))
     fg <- gtable_rbind(timeLineFrame,mapFrame, size = "last")
 
@@ -168,7 +170,7 @@ saveGIF({
     replicate(100,gifReplicate(fg))
     grid.draw(fg)
 
-},movie.name="tabn219.46map.gif",interval = .05, title_frame = FALSE, ani.width = 1050, ani.height = 800)
+},movie.name="tabn219.46map18data.gif",interval = .05, title_frame = FALSE, ani.width = 1050, ani.height = 800)
 
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)
@@ -177,5 +179,5 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.46map.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.46map_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.46map18data.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Annual\\ Report/Results/tabn219.46map18data_compressed.gif")
 
