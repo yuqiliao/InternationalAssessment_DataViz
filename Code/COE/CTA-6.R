@@ -5,14 +5,14 @@
 
 
 ### Set things up ------
-#win
-install.packages("installr")
-library(installr)
-#mac
-library(devtools)
-install_github('andreacirilloac/updateR')
-library(updateR)
-updateR(admin_password = '222')
+# #win
+# install.packages("installr")
+# library(installr)
+# #mac
+# library(devtools)
+# install_github('andreacirilloac/updateR')
+# library(updateR)
+# updateR(admin_password = '')
 
 # install.ImageMagick()
 # Sys.setenv(PATH = paste("C:/PROGRA~1/ImageMagick-7.0.8-Q16",
@@ -21,6 +21,7 @@ updateR(admin_password = '222')
 # library(gganimate) # gh_install_packages("dgrtwo/gganimate", ref = "26ec501") #devtools::install_github("dgrtwo/gganimate")
 # library(purrr)
 # library(cowplot)
+library(ggtext)
 
 # define and load all packages
 reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "here", "stringr", "readxl", "cowplot")
@@ -262,7 +263,9 @@ saveGIF({
         replicate(30, grid::grid.draw(g2))
       }
       
-    } else {
+    } else if(i == 1){ #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my previous solution is to manually delete the first blank frame in Photoshop after the gif is generated. This time around 4/29/20, I think by switching back to use `g` which is not used by ggdraw is helpful
+      grid::grid.draw(g); 
+      } else {
       # just draw the plot one time 
       grid::grid.draw(g2)
     }
@@ -271,7 +274,18 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_2020_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my temporal solution is to manually delete the first blank frame in Photoshop after the gif is generated.
+movie.name=here("Code", "COE", "Results", "CTA-6_2020_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) 
+
+
+#compressing
+gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
+  command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)
+  system.fun <- if (.Platform$OS.type == "windows") shell else system
+  if(show) message("Executing: ", strwrap(command, exdent = 2, prefix = "\n"))
+  system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
+}
+
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-6_2020_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-6_2020_v1_compressed.gif")
 
 
 
