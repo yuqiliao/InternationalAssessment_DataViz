@@ -1,6 +1,6 @@
 ### COE indicators data viz
 ### This is to be used as a gif tweet for the NCES handle
-### 5/9/19
+### 4/29/20 update
 ### Yuqi Liao
 
 
@@ -14,6 +14,7 @@
 # library(gganimate) # gh_install_packages("dgrtwo/gganimate", ref = "26ec501") #devtools::install_github("dgrtwo/gganimate")
 # library(purrr)
 # library(cowplot)
+library(ggtext)
 
 # define and load all packages
 reqpkg <- c("ggplot2","scales", "tidyr", "Cairo", "extrafont", "dplyr", "lubridate", "tweenr", "animation", "RColorBrewer", "grid", "gridExtra", "directlabels", "gganimate", "ggrepel", "showtext", "here", "stringr", "readxl")
@@ -30,12 +31,12 @@ here()
 
 #load font
 #font_import() #run only once
-#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
+#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "PublicoText-Roman" for now
 
 
 ### Read in data  -----
 # the data has already been processed, based on the raw data from "tabn318.40.xls"
-df <- read_excel(path = here("Code", "COE", "Materials", "CTS-1_cleanData.xlsx"),
+df <- read_excel(path = here("Code", "COE", "Materials", "CTS-1_2020cleanData.xlsx"),
                  sheet = "processed") %>% 
   # mutate the year column so that later ggplot understands it
   separate(col = AcademicYear, into = c("Year1", "Year2"), sep = "-", remove = FALSE) %>% 
@@ -111,22 +112,27 @@ cols <- c("#fbab18", "#3EC7F4", "#3FA66C","#242953", "#fb3a18")
 #plotCaption <- expression(paste(''^{14}, "C", sep = ""))
 #plotCaption <- expression(textstyle(paste(''^{14}, "C", sep = "")))
 
+# plotCaption <- expression(
+#   #line 1
+#   atop(textstyle(paste(''^1,"Data are for certificates below the associate's degree level.                                                                                                                                                                                                      ", sep = "")),
+#        #line 2
+#        atop(textstyle(paste(''^2,"Includes Ph.D., Ed.D., and comparable degrees at the doctoral level. Includes most degrees formerly classified as first-professional, such as M.D., D.D.S., and law degrees.", sep = "")),
+#             #line 3 (use scriptscriptstyle to add space between 2 & 3)
+#             atop(scriptscriptstyle(""), atop(textstyle("SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), Fall 2001 through Fall 2017,     "),
+#                 #line 4 (use scriptscriptstyle to add space between 3 & 4)
+#                 atop(scriptscriptstyle(""), textstyle("Completions component. See"~italic("Digest of Education Statistics 2018,")~"Table 318.40.                                                                                                                                                                  "))
+#                    )
+#                 )
+#             )
+#   )
+# )
+    
+# ggtext is such a life saver, so i don't have to use monster code above, which is also slowing down everything 
+plotCaption <- "<span><sup>1</sup>Data are for certificates below the associate's degree level.<br>
+<sup>2</sup>Includes Ph.D., Ed.D., and comparable degrees at the doctoral level. Includes most degrees formerly classified as first-professional, such as M.D., D.D.S., and law degrees.<br>
+SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), Fall 2001 through Fall 2018<br>
+Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2019,</i> Table 318.40.</span>"
 
-plotCaption <- expression(
-  #line 1
-  atop(textstyle(paste(''^1,"Data are for certificates below the associate's degree level.                                                                                                                                                                                                      ", sep = "")),
-       #line 2
-       atop(textstyle(paste(''^2,"Includes Ph.D., Ed.D., and comparable degrees at the doctoral level. Includes most degrees formerly classified as first-professional, such as M.D., D.D.S., and law degrees.", sep = "")),
-            #line 3 (use scriptscriptstyle to add space between 2 & 3)
-            atop(scriptscriptstyle(""), atop(textstyle("SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), Fall 2001 through Fall 2017,     "),
-                #line 4 (use scriptscriptstyle to add space between 3 & 4)
-                atop(scriptscriptstyle(""), textstyle("Completions component. See"~italic("Digest of Education Statistics 2018,")~"Table 318.40.                                                                                                                                                                  "))
-                   )
-                )
-            )
-  )
-)
-            
 
 # plotCaption <- list()
 # plotNote <- expression('NOTE: Education systems are ordered by the percentage of students reaching the '~italic('Advanced')~' international benchmark.')
@@ -140,23 +146,23 @@ plotCaption <- expression(
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Number"
 
-plotTitle <- c("Number of certificates and degrees conferred by postsecondary institutions: \nAcademic years 2000-01 through 2016-17")
+plotTitle <- c("Number of certificates and degrees conferred by postsecondary institutions: \nAcademic years 2000-01 through 2017-18")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
-theme_white <- theme(text = element_text(family="Calibri", color = "black"),
+theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "black"),
                      panel.grid = element_blank(), panel.border = element_blank(),
                      axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5),
-                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "Calibri Light"),
-                     axis.text.y=element_text(size=22, family = "Calibri Light"),
+                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "PublicoText-Roman"),
+                     axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
                      #axis.line.x=element_line(size = 1),
                      #axis.line.y=element_line(size = 1),
                      axis.ticks.x = element_blank(),  
                      axis.ticks.y = element_blank(),
-                     plot.title=element_text(size=31,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "Calibri", face = "plain"),
-                     plot.caption=element_text(size=17, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
-                     #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "Calibri Light"),
+                     plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Roman"),
+                     plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
+                     #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
                      legend.position="none"
 )
@@ -176,7 +182,7 @@ xAxisLabels <- paste0(year(unique(df$Year)), "-",
                       #last two characters of "2001", etc.
                       str_sub(year(unique(df$Year))+1,-2)) %>% 
                       # empty a few xAxisLabels values based on condition (otherwise the x axis labels gets too crowded)
-                      ifelse(. %in% c("2000-01", "2005-06", "2010-11", "2016-17"), ., "")
+                      ifelse(. %in% c("2000-01", "2005-06", "2010-11", "2017-18"), ., "")
   
 
 
@@ -199,12 +205,12 @@ yAxisLimits <- c(0,max(yAxisBreaks)* 1.03)
 #   #           aes(label = round(Value, 0)),
 #   #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
 #   #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
-#   #           family="Calibri") + 
+#   #           family="PublicoText-Roman") + 
 #   # geom_text(data = subset(tf, .frame == max(.frame)), size = 9, 
 #   #           aes(label = round(Value, 0)),
 #   #           nudge_y = subset(tf, .frame == max(.frame))$nudge_y, 
 #   #           nudge_x= subset(tf, .frame == max(.frame))$nudge_x, 
-#   #           family="Calibri") +
+#   #           family="PublicoText-Roman") +
 #   theme_minimal() + theme_white + 
 #   scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
 #   labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
@@ -257,7 +263,7 @@ saveGIF({
     print(paste0("working on the ", i, "th frame"))
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2018-10-21"))) +                           
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2019-10-21"))) +                           
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
@@ -267,7 +273,7 @@ saveGIF({
     # when i == 1, geom_dl wont' work
     if(i!=1){
       g <- g +
-        geom_text(data = subset(tf, .frame == i), aes(label = Category), hjust=-0.2, vjust=0, show.legend = FALSE, parse=TRUE, size = 7, nudge_y = subset(tf, .frame == i)$nudge_y)
+        geom_text(data = subset(tf, .frame == i), aes(label = Category), hjust=-0.2, vjust=0, show.legend = FALSE, parse=TRUE, size = 7, nudge_y = subset(tf, .frame == i)$nudge_y, family = "PublicoText-Roman") 
     }
     
     
@@ -289,7 +295,7 @@ saveGIF({
     #           aes(label = round(Value, 0)),
     #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
     #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
-    #           family="Calibri")
+    #           family="PublicoText-Roman")
     
     #grob
     # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
@@ -316,7 +322,7 @@ saveGIF({
       if (i == pause_frames){
         replicate(200,gifReplicate(plot))
       } else {
-        replicate(3,gifReplicate(plot)) #it doesn't apply here
+        replicate(30,gifReplicate(plot)) #it doesn't apply here
       }
       
     } else {
@@ -330,79 +336,88 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTS-1_2020_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+
+#compressing
+gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
+  command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)
+  system.fun <- if (.Platform$OS.type == "windows") shell else system
+  if(show) message("Executing: ", strwrap(command, exdent = 2, prefix = "\n"))
+  system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
+}
+
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v1_compressed.gif")
 
 
 
-
- # version 1 - pause in each year (and draw dots) - not used =====
-saveGIF({
-  print(Sys.time())
-  for (i in 1:max(tf$.frame)) {
-    print(paste0("working on the ", i, "th frame"))
-    g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
-      geom_line(aes(group=Category, color=Category), size=2.5) +
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2018-10-21"))) +                           
-      scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
-      theme_minimal() + theme_white + 
-      scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
-      labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, 
-           caption = plotCaption) 
-    
-    # when i == 1, geom_dl wont' work
-    if(i!=1){
-      g <- g +
-        geom_dl(data = subset(tf, .frame <= i),
-                aes(label = Category), method = list("last.qp", cex = 2, hjust = -0.2))
-    }
-    
-    
-    # add geom_point to g based on i
-    X_axis_years <- unique(df$Year)
-    Current_years <- unique(subset(tf, .frame <= i)$Year)
-    a <- X_axis_years %in% Current_years
-    
-    g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[a]),aes(group=Category, color=Category), size=6)
-    # # add geom_text to g based on i
-    # geom_text(data = subset(tf, Year %in% X_axis_years[a]), size = 9, 
-    #           aes(label = round(Value, 0)),
-    #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
-    #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
-    #           family="Calibri")
-    
-    #grob
-    plot <- ggplotGrob(g)
-    
-    # define object that store the name of frame with which we want the plot to "pause"
-    pause_frames <- unique(tf[tf$Year %in% X_axis_years , ]$.frame)
-    
-    
-    
-    
-    # draw the plot
-    if (i %in% pause_frames){
-      # replicate (and draw) the plot many times
-      grid::grid.draw(plot);
-      # let the last plot pause a bit more
-      if (i == pause_frames[length(pause_frames)]){
-        replicate(200,gifReplicate(plot))
-      } else {
-        replicate(10,gifReplicate(plot))
-      }
-      
-    } else {
-      # just draw the plot one time
-      grid::grid.draw(plot);
-      grid.newpage()
-    }
-    
-    
-  }  
-  print(Sys.time())
-},
-# specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_v1.gif"),interval = .02, ani.width = 1200, ani.height = 1000)
-
+#  # version 1 - pause in each year (and draw dots) - not used =====
+# saveGIF({
+#   print(Sys.time())
+#   for (i in 1:max(tf$.frame)) {
+#     print(paste0("working on the ", i, "th frame"))
+#     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
+#       geom_line(aes(group=Category, color=Category), size=2.5) +
+#       scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2018-10-21"))) +                           
+#       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
+#       theme_minimal() + theme_white + 
+#       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
+#       labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, 
+#            caption = plotCaption) 
+#     
+#     # when i == 1, geom_dl wont' work
+#     if(i!=1){
+#       g <- g +
+#         geom_dl(data = subset(tf, .frame <= i),
+#                 aes(label = Category), method = list("last.qp", cex = 2, hjust = -0.2))
+#     }
+#     
+#     
+#     # add geom_point to g based on i
+#     X_axis_years <- unique(df$Year)
+#     Current_years <- unique(subset(tf, .frame <= i)$Year)
+#     a <- X_axis_years %in% Current_years
+#     
+#     g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[a]),aes(group=Category, color=Category), size=6)
+#     # # add geom_text to g based on i
+#     # geom_text(data = subset(tf, Year %in% X_axis_years[a]), size = 9, 
+#     #           aes(label = round(Value, 0)),
+#     #           nudge_y = subset(tf, .frame == min(.frame))$nudge_y, 
+#     #           nudge_x= subset(tf, .frame == min(.frame))$nudge_x, 
+#     #           family="PublicoText-Roman")
+#     
+#     #grob
+#     plot <- ggplotGrob(g)
+#     
+#     # define object that store the name of frame with which we want the plot to "pause"
+#     pause_frames <- unique(tf[tf$Year %in% X_axis_years , ]$.frame)
+#     
+#     
+#     
+#     
+#     # draw the plot
+#     if (i %in% pause_frames){
+#       # replicate (and draw) the plot many times
+#       grid::grid.draw(plot);
+#       # let the last plot pause a bit more
+#       if (i == pause_frames[length(pause_frames)]){
+#         replicate(200,gifReplicate(plot))
+#       } else {
+#         replicate(10,gifReplicate(plot))
+#       }
+#       
+#     } else {
+#       # just draw the plot one time
+#       grid::grid.draw(plot);
+#       grid.newpage()
+#     }
+#     
+#     
+#   }  
+#   print(Sys.time())
+# },
+# # specify the pathway and name of the gif output, as well as the interval, width, and height
+# movie.name=here("Code", "COE", "Results", "CTS-1_v1.gif"),interval = .02, ani.width = 1200, ani.height = 1000)
+# 
 
 
 
