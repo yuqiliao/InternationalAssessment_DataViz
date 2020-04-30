@@ -1,12 +1,19 @@
 ### COE indicators data viz
 ### This is to be used as a gif tweet for the NCES handle
-### 5/9/19
+### 4/29/20 update
 ### Yuqi Liao
 
 
 ### Set things up ------
-# install.packages("installr")
-# library(installr)
+#win
+install.packages("installr")
+library(installr)
+#mac
+library(devtools)
+install_github('andreacirilloac/updateR')
+library(updateR)
+updateR(admin_password = '222')
+
 # install.ImageMagick()
 # Sys.setenv(PATH = paste("C:/PROGRA~1/ImageMagick-7.0.8-Q16",
 #                         Sys.getenv("PATH"), sep = ";"))
@@ -29,13 +36,13 @@ sapply(reqpkg, function(pkgi) {
 here()
 
 #load font
-#font_import() #run only once
-#loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
+#font_import(paths = "/Users/Yuqi/Library/Fonts") #run only once
+loadfonts() #didn't load "Gotham" font sucessfully, will stick with "Calibri" for now
 
 
 ### Read in data  -----
 # the data has already been processed, based on the raw data from "tabn322.40.xls" and "tabn322.50.xls"
-data <- read_excel(path = here("Code", "COE", "Materials", "CTA-6_cleanData.xlsx"),
+data <- read_excel(path = here("Code", "COE", "Materials", "CTA-6_2020cleanData.xlsx"),
                  sheet = "processed")
 
 
@@ -86,7 +93,7 @@ plotBreak = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 plotBreakLabel = plotBreak
 
 # define title/caption, etc.
-plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), ', 'Fall 2017, Completions component. See'~italic('Digest of Education Statistics 2018,')~' tables 322.40 and 322.50.                                                                  '))
+plotCaption <- "<span>SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),<br>Fall 2018, Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2019,</i> tables 322.40 and 322.50.</span>"
 
 # plotCaption <- list()
 # plotNote <- expression(paste("NOTE: Education systems are ordered by the percentage of students reaching the ", italic("Advanced")," international benchmark."))
@@ -100,27 +107,27 @@ plotCaption <- expression(atop('SOURCE: U.S. Department of Education, National C
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Field of study"
 
-plotTitle <- c("Percentage distribution of bachelor's degrees conferred by postsecondary \ninstitutions in selected fields of study, by sex: Academic year 2016-17")
+plotTitle <- c("Percentage distribution of bachelor's degrees conferred by postsecondary \ninstitutions in selected fields of study, by sex: Academic year 2017-18")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
 theme_white <- theme(#aspect.ratio = 1.2:1,
-                     text = element_text(size=16, family="Calibri", color = "black"),
+                     text = element_text(size=16, family="PublicoText-Roman", color = "black"),
                      panel.background=element_blank(),
                      panel.border=element_rect(color="transparent"),
                      panel.grid = element_blank(),
-                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, color = "#686868"),
+                     axis.title.x=element_text(size=24, margin = margin(t=15, b = 5), hjust = .5, color = "#686868"),
                      #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
-                     axis.text.x=element_text(size=20, angle = 0, hjust = 0.5, family = "Calibri Light"),
-                     axis.text.y=element_text(size=22, hjust = 1, family = "Calibri", face = "plain", color = "black"),
+                     axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "PublicoText-Roman"),
+                     axis.text.y=element_text(size=20, hjust = 1, family = "PublicoText-Roman", face = "plain", color = "black"),
                      axis.line.x = element_line(size = 1, color = "#686868"),
                      axis.line.y = element_blank(),
                      axis.ticks.x = element_line(size = 1, "#686868"),
                      axis.ticks.length =  unit(.25, "cm"),
                      axis.ticks.y = element_blank(),
-                     plot.title=element_text(size=34,family = "Calibri", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26,family = "Calibri Light", face = "plain" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5), color = "#686868"),
-                     plot.caption=element_text(size=18, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Calibri"),
+                     plot.title=element_text(size=31,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
+                     plot.subtitle=element_text(size=24,family = "PublicoText-Roman", face = "plain" , hjust= 0,lineheight=1, margin = margin(t = 15, b = 5), color = "#686868"),
+                     plot.caption=element_markdown(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
                      legend.justification = "center",
@@ -129,7 +136,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      #legend.spacing = unit(c(1), "line"),
                      legend.key.height=unit(1.5,"line"),
                      legend.key.width=unit(1.5,"line"),
-                     legend.text = element_text(size=25, family = "Calibri", hjust= 0,lineheight=1)
+                     legend.text = element_text(size=21, family = "PublicoText-Roman", hjust= 0,lineheight=1)
 )
 
 ggrepelSeed <- 1234
@@ -229,7 +236,7 @@ saveGIF({
     if (i <= 51) {
       
       g2 <- ggdraw(g) + 
-        geom_rect(aes(xmin = 0.58, xmax = 0.68, ymin = 0.1, ymax = 0.15),
+        geom_rect(aes(xmin = 0.58, xmax = 0.68, ymin = 0.09, ymax = 0.15),
                   colour = "white", fill = "white")
     } else {
       g2 <- ggdraw(g)
@@ -264,7 +271,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_v8.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my temporal solution is to manually delete the first blank frame in Photoshop after the gif is generated.
+movie.name=here("Code", "COE", "Results", "CTA-6_2020_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my temporal solution is to manually delete the first blank frame in Photoshop after the gif is generated.
 
 
 
