@@ -223,7 +223,8 @@ saveGIF({
       geom_text(data = subset(tf, .frame == max(tf$.frame)),
                 mapping = aes(x = Category, y = Percent, label = labelNormal, group = Gender),
                 color = "white", size = 7,
-                position = position_stack(vjust = 0.5))
+                position = position_stack(vjust = 0.5),
+                family="PublicoText-Roman")
        
     
     
