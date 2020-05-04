@@ -146,21 +146,23 @@ Completions component. See <i style='font-family: PublicoText-Italic'>Digest of 
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Number"
 
-plotTitle <- c("Number of certificates and degrees conferred by postsecondary institutions: \nAcademic years 2000-01 through 2017-18")
+plotTitle <- c("Number of certificates and degrees conferred by postsecondary institutions: \nAcademic years 2000—01 through 2017—18")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
 theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "black"),
-                     panel.grid = element_blank(), panel.border = element_blank(),
-                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5),
+                     panel.grid = element_blank(),
+                     panel.grid.major.y = element_line(size = 0.5, color = "#686868", linetype = "dashed"), 
+                     panel.border = element_blank(),
+                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "#686868"),
                      axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "PublicoText-Roman"),
                      axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
-                     #axis.line.x=element_line(size = 1),
+                     axis.line.x=element_line(size = 1, color = "#686868"),
                      #axis.line.y=element_line(size = 1),
                      axis.ticks.x = element_blank(),  
                      axis.ticks.y = element_blank(),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Roman"),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Bold", color = "#686868"),
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
@@ -178,11 +180,11 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
 
 # x axis break labels and levels
 xAxisBreaks <- unique(df$Year)
-xAxisLabels <- paste0(year(unique(df$Year)), "-", 
+xAxisLabels <- paste0(year(unique(df$Year)), "—", 
                       #last two characters of "2001", etc.
                       str_sub(year(unique(df$Year))+1,-2)) %>% 
                       # empty a few xAxisLabels values based on condition (otherwise the x axis labels gets too crowded)
-                      ifelse(. %in% c("2000-01", "2005-06", "2010-11", "2017-18"), ., "")
+                      ifelse(. %in% c("2000—01", "2005—06", "2010—11", "2015—16", "2017—18"), ., "")
   
 
 
@@ -190,7 +192,7 @@ xAxisLabels <- paste0(year(unique(df$Year)), "-",
 yAxisBreaks <- seq(0, 2000000, by = 200000)
 yAxisLabels <- paste0(format(seq(0, 2000000, by = 200000), big.mark = ","))
 # yAxisLabels <- c(yAxisLabels[1:length(yAxisLabels)-1], paste0("$",yAxisLabels[length(yAxisLabels)]))
-yAxisLimits <- c(0,max(yAxisBreaks)* 1.03)
+yAxisLimits <- c(-100000,max(yAxisBreaks)* 1.03) #been asked to make x axis line lower
 
 
 
@@ -336,7 +338,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_2020_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTS-1_2020_v2.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -346,7 +348,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v1_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v2.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v2_compressed.gif")
 
 
 
