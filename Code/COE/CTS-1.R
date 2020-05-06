@@ -166,7 +166,8 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
-                     legend.position="none"
+                     legend.position="none",
+                     plot.margin = margin(t = 0,r = 140, b = 0, l = 0, unit = "pt") #make enough white space to the right for geom_text labels
 )
 
 
@@ -265,7 +266,7 @@ saveGIF({
     print(paste0("working on the ", i, "th frame"))
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2019-10-21"))) +                           
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2017-05-06"))) +                           
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
@@ -275,7 +276,8 @@ saveGIF({
     # when i == 1, geom_dl wont' work
     if(i!=1){
       g <- g +
-        geom_text(data = subset(tf, .frame == i), aes(label = Category), hjust=-0.2, vjust=0, show.legend = FALSE, parse=TRUE, size = 7, nudge_y = subset(tf, .frame == i)$nudge_y, family = "PublicoText-Roman") 
+        geom_text(data = subset(tf, .frame == i), aes(label = Category), hjust=-0.2, vjust=0, show.legend = FALSE, parse=TRUE, size = 7, nudge_y = subset(tf, .frame == i)$nudge_y, family = "PublicoText-Roman") +
+        coord_cartesian(clip = 'off') #to avoid the label being cut off in the margin area
     }
     
     
@@ -338,7 +340,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_2020_v2.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTS-1_2020_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -348,7 +350,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v2.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v2_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v3.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v3_compressed.gif")
 
 
 
