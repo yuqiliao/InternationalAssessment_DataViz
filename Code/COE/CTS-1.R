@@ -63,6 +63,7 @@ df$Category <- as.factor(df$Category)
 
 # process `Year`
 df$Year <- as.Date(as.character(df$Year),"%Y")
+# lastYear <- as.Date(as.character(df$Year[length(df$Year)]),"%Y") #this could dynamically identify the last year
 
 # function to create list of data sets from the original data frame (by state)
 states1<-unique((df$Year))
@@ -152,9 +153,9 @@ plotTitle <- c("Number of certificates and degrees conferred by postsecondary in
 # NCES theme, which gets slightly adjusted for each visualization
 theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "black"),
                      panel.grid = element_blank(),
-                     panel.grid.major.y = element_line(size = 0.5, color = "#686868", linetype = "dashed"), 
+                     panel.grid.major.y = element_line(size = 0.25, color = "#686868", linetype = "dashed"), 
                      panel.border = element_blank(),
-                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "#686868"),
+                     axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "black"),
                      axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "PublicoText-Roman"),
                      axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
                      axis.line.x=element_line(size = 1, color = "#686868"),
@@ -162,7 +163,7 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      axis.ticks.x = element_blank(),  
                      axis.ticks.y = element_blank(),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Bold", color = "#686868"),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Bold", color = "black"),
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
@@ -266,7 +267,8 @@ saveGIF({
     print(paste0("working on the ", i, "th frame"))
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-02-25", "2017-05-06"))) +                           
+      ##mannually adjust the limits here to make the x axis line cover the label of the first and the last year
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2000-01-01", "2018-04-01"))) +                           
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
