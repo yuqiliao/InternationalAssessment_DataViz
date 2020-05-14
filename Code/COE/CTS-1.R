@@ -131,7 +131,8 @@ cols <- c("#fbab18", "#3EC7F4", "#3FA66C","#242953", "#fb3a18")
 # ggtext is such a life saver, so i don't have to use monster code above, which is also slowing down everything 
 plotCaption <- "<span><sup>1</sup>Data are for certificates below the associate's degree level.<br>
 <sup>2</sup>Includes Ph.D., Ed.D., and comparable degrees at the doctoral level. Includes most degrees formerly classified as first-professional, such as M.D., D.D.S., and law degrees.<br>
-SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), Fall 2001 through Fall 2018<br>
+NOTE: Data are for postsecondary institutions participating in Title IV federal financial aid programs. Some data have been revised from previously published figures.<br>
+SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS), Fall 2001 through Fall 2018,<br>
 Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2019,</i> Table 318.40.</span>"
 
 
@@ -342,7 +343,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_2020_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTS-1_2020_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -352,7 +353,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v3.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v3_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v4_compressed.gif")
 
 
 
