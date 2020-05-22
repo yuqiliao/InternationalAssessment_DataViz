@@ -154,15 +154,16 @@ plotTitle <- c("Number of certificates and degrees conferred by postsecondary in
 # NCES theme, which gets slightly adjusted for each visualization
 theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "black"),
                      panel.grid = element_blank(),
-                     panel.grid.major.y = element_line(size = 0.25, color = "#686868", linetype = "dashed"), 
+                     panel.grid.major.y = element_line(size = 0.25, color = "#576F7F", linetype = "solid"), 
                      panel.border = element_blank(),
                      axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "black"),
-                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, family = "PublicoText-Roman"),
+                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, vjust = -1, family = "PublicoText-Roman"),
                      axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
-                     axis.line.x=element_line(size = 1, color = "#686868"),
+                     axis.line.x=element_line(size = 0.25, color = "#576F7F"),
                      #axis.line.y=element_line(size = 1),
                      axis.ticks.x = element_blank(),  
                      axis.ticks.y = element_blank(),
+                     axis.ticks.length.y = unit(0.5, "cm"),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
                      plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Bold", color = "black"),
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
@@ -195,7 +196,7 @@ xAxisLabels <- paste0(year(unique(df$Year)), "—",
 yAxisBreaks <- seq(0, 2000000, by = 200000)
 yAxisLabels <- paste0(format(seq(0, 2000000, by = 200000), big.mark = ","))
 # yAxisLabels <- c(yAxisLabels[1:length(yAxisLabels)-1], paste0("$",yAxisLabels[length(yAxisLabels)]))
-yAxisLimits <- c(-100000,max(yAxisBreaks)* 1.03) #been asked to make x axis line lower
+yAxisLimits <- c(0,max(yAxisBreaks)* 1.03) 
 
 
 
@@ -343,7 +344,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTS-1_2020_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTS-1_2020_v5.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -353,7 +354,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v4_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v5.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTS-1_2020_v5_compressed.gif")
 
 
 

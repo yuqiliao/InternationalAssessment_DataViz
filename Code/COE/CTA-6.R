@@ -127,7 +127,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      axis.ticks.length =  unit(.25, "cm"),
                      axis.ticks.y = element_blank(),
                      plot.title=element_text(size=31,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0,lineheight=1, margin = margin(t = 15, b = 5), color = "black"),
+                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0, vjust = -3,lineheight=1, margin = margin(t = 15, b = 5), color = "black"),
                      plot.caption=element_markdown(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
@@ -272,8 +272,16 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-6_2020_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop after the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "COE", "Results", "CTA-6_2020_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop after the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+#compressing	
+gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
+  command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
+  system.fun <- if (.Platform$OS.type == "windows") shell else system	
+  if(show) message("Executing: ", strwrap(command, exdent = 2, prefix = "\n"))	
+  system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))	
+}	
 
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-6_2020_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-6_2020_v4_compressed.gif")
 
  
 
