@@ -1,2 +1,2 @@
 # InternationalAssessment_DataViz
-Data Viz for NCES tweets
+Data Viz code for making tweets for the NCES twitter handle
