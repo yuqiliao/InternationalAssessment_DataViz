@@ -106,7 +106,7 @@ plotCaption <- "<span>SOURCE: U.S. Department of Commerce, Census Bureau, Househ
 plotSubtitle <- "Hours"
 #plotSubtitle <- "Field of study"
 
-plotTitle <- c("Adults' average weekly time spent on teaching activities with \nelementary and secondary studentsin their household, by \neducational attainment of adult: April 23 through May 5, 2020")
+plotTitle <- c("Adults' average weekly time spent on teaching activities with \nelementary and secondary students in their household, by \neducational attainment of adult: April 23 through May 5, 2020")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
@@ -118,7 +118,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      panel.grid.major.x = element_blank(),
                      panel.grid.minor.y = element_blank(),
                      panel.grid.minor.x = element_blank(),
-                     axis.title.x=element_text(size=22, margin = margin(t=15, b = 5), hjust = .5, vjust = -1.1, color = "black", family = "PublicoText-Bold"),
+                     axis.title.x=element_text(size=22, margin = margin(t=25, b = 15), hjust = .5, vjust = -1.1, color = "black", family = "PublicoText-Bold"),
                      axis.title.y=element_blank(),
                      axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, vjust= -1, family = "PublicoText-Roman"),
                      axis.text.y=element_text(size=18, hjust = 1, family = "PublicoText-Roman"),
@@ -300,7 +300,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "Census", "Results", "Figure1-4.gif"),interval = .02, ani.width = 900, ani.height = 900) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop after the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "Census", "Results", "Figure1-5.gif"),interval = .02, ani.width = 900, ani.height = 900) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop after the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
 #compressing	
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
@@ -309,7 +309,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))	
 }	
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Census/Results/Figure1-4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Census/Results/Figure1-4_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Census/Results/Figure1-5.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/Census/Results/Figure1-5_compressed.gif")
 
  
 
