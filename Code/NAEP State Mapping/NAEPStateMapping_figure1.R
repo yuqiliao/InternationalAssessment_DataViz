@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/2019G4G8Snakechart20200218_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure1_12142020_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
     #getting rid of irrelevant rows (if any)
     dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -38,7 +38,7 @@ for (tab in tabList){
     dplyr::filter(!midPoint %in% NA)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/2019G4G8Snakechart20200218_yl.xlsx", sheet = tab) %>%
+  proficiencyLevelList <- read_excel("./Materials/SnakeChartData_2019_yl.xlsx", sheet = tab) %>%
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
@@ -66,6 +66,13 @@ for (tab in tabList){
   }
   if(length(PARCCMax) == 0) {
     PARCCMax <- NA
+  }
+  
+  if(length(ACTMin) == 0) {
+    ACTMin <- NA
+  }
+  if(length(ACTMax) == 0) {
+    ACTMax <- NA
   }
     
   
@@ -235,7 +242,7 @@ for (tab in tabList){
   loadfonts(device = "postscript")
   # save as
   setEPS()
-  postscript(paste0("./Results/", "figure1", tab, "-",today(), ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
+  postscript(paste0("./Results/", today(), "-", "figure1", tab, ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
   grid::grid.draw(g)
   dev.off()
   

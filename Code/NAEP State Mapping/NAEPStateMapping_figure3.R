@@ -23,11 +23,11 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure3_190418_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure3_12142020_yl.xlsx", sheet = tab) %>% 
   dplyr::select(`year`, `Highest`, `Lowest`, `range`)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/G4G8Figure3_190418_yl.xlsx", sheet = tab) %>% 
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_12142020_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
@@ -176,13 +176,13 @@ for (tab in tabList){
     
     
     # add achievement level text - version 2
-    annotate("text", x = 2011, y = basic - 5, label = paste0("(", basic, ")"), 
+    annotate("text", x = 2015, y = basic - 5, label = paste0("(", basic, ")"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2011, y = basic + 5, label = paste0("NAEP~italic(Basic)"), 
+    annotate("text", x = 2015, y = basic + 5, label = paste0("NAEP~italic(Basic)"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2011 , y = proficient - 5, label = paste0("(", proficient, ")"), 
+    annotate("text", x = 2015 , y = proficient - 5, label = paste0("(", proficient, ")"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2011 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)"), 
+    annotate("text", x = 2015 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
     
     #scale_x_discrete() +
@@ -206,9 +206,8 @@ for (tab in tabList){
                        labels = c(0, yAxisBreaks[2:(length(yAxisBreaks) - 1)], 500), 
                        breaks = yAxisBreaks, expand = c(0,0)) +
     scale_x_continuous(#limits = c(2006, 2018),
-                       labels = c(2007, 2015, 2017),
-                       breaks = c(2007, 2015, 2017) ,
-                       trans = squish_trans(2008,2014,4)) +
+                       labels = c(2013, 2017, 2019),
+                       breaks = c(2013, 2017, 2019)) +
     coord_cartesian(clip = "off") +
     annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
     annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
@@ -246,7 +245,7 @@ for (tab in tabList){
   loadfonts(device = "postscript")
   # save as
   setEPS()
-  postscript(paste0("./Results/", "figure3", tab, "-",today(), ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
+  postscript(paste0("./Results/", today(), "-", "figure3", tab, ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
   grid::grid.draw(g)
   dev.off()
 

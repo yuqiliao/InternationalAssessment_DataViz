@@ -24,17 +24,17 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure2_190220_yl.xlsx", sheet = tab)
+  data <- read_excel("./Materials/G4G8Figure2_12142020_yl.xlsx", sheet = tab)
   
   # define yearCol
   if ( grepl("R", tab) ) {
-    data[data$year == 2007, "yearCol"] <- "#8E9FBC" 
-    data[data$year == 2015, "yearCol"] <- "#C8942B"
-    data[data$year == 2017, "yearCol"] <- "#212C68"
+    data[data$year == 2009, "yearCol"] <- "#8E9FBC" 
+    data[data$year == 2017, "yearCol"] <- "#C8942B"
+    data[data$year == 2019, "yearCol"] <- "#212C68"
   } else {
-    data[data$year == 2007, "yearCol"] <- "#00AE9A"
-    data[data$year == 2015, "yearCol"] <- "#C8942B"
-    data[data$year == 2017, "yearCol"] <- "#007167" 
+    data[data$year == 2009, "yearCol"] <- "#00AE9A"
+    data[data$year == 2017, "yearCol"] <- "#C8942B"
+    data[data$year == 2019, "yearCol"] <- "#007167" 
   }
   
   
@@ -44,7 +44,7 @@ for (tab in tabList){
   
   orderYear <- unique(data$year)
   data$year <- factor(data$year, levels = orderYear,
-                      labels = c(" 2007", " 2015", " 2017"))
+                      labels = c(" 2009", " 2017", " 2019"))
   
   glimpse(data)
   ### Plotting -----
@@ -166,7 +166,7 @@ for (tab in tabList){
   loadfonts(device = "postscript")
   # save as
   setEPS()
-  postscript(paste0("./Results/", "figure2", tab, "-",today(), ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
+  postscript(paste0("./Results/",today(), "-", "figure2", tab, ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
   grid::grid.draw(g)
   dev.off()
 
