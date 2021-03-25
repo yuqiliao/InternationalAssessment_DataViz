@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure1_12142020_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure1_03082021_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
     #getting rid of irrelevant rows (if any)
     dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -38,7 +38,7 @@ for (tab in tabList){
     dplyr::filter(!midPoint %in% NA)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/SnakeChartData_2019_yl.xlsx", sheet = tab) %>%
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_03082021_yl.xlsx", sheet = tab) %>%
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
