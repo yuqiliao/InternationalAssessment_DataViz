@@ -1,4 +1,4 @@
-### COE indicators data viz
+### COE indicators data viz - horizontal bar chart
 ### This is to be used as a gif tweet for the NCES handle
 ### 4/28/21 for 2021 COE efforts
 ### Yuqi Liao
@@ -278,7 +278,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTB-3_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop after the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "COE", "Results", "CTB-3_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
 #compressing	
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
