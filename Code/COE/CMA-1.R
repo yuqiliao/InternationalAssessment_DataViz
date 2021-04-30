@@ -287,7 +287,7 @@ saveGIF({
       grid::grid.draw(plot);
       # let the last plot pause a bit more
       if (i == pause_frames){
-        replicate(2,gifReplicate(plot))
+        replicate(200,gifReplicate(plot))
       } else {
         replicate(30,gifReplicate(plot)) #it doesn't apply here
       }
