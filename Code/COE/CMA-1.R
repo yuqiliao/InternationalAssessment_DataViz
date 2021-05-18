@@ -97,11 +97,10 @@ tf$nudge_y <- ifelse(tf$Category %in% "State", 25,
 
 # color  
 # nces_palette =  c("#fbab18", "#3EC7F4", "#3FA66C","#242953")
-cols <- c("#fbab18", "#3EC7F4", "#3FA66C","#242953", "#fb3a18")
-
+cols <- c("#3EC7F4", "#fbab18","#3FA66C","#242953", "#fb3a18")
 
 plotCaption <- "<span>NOTE: Data are for the 50 states and the District of Columbia. Revenues are in constant 2019–20 dollars. Constant dollars based on the Consumer Price Index,<br>prepared by the Bureau of Labor Statistics, U.S. Department of Labor, adjusted to a school-year basis.<br>
-SOURCE: U.S. Department of Education, National Center for Education Statistics, Common Core of Data (CCD), \"National Public Education Financial Survey,\"<br>2009–10 through 2017–18. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2029,</i> table 235.10.</span>"
+SOURCE: U.S. Department of Education, National Center for Education Statistics, Common Core of Data (CCD), &ldquo;National Public Education Financial Survey,&rdquo;<br>2009–10 through 2017–18. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2020,</i> table 235.10.</span>"
 
 
 plotSubtitle <- "Revenues (in billions)"
@@ -123,7 +122,7 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      axis.ticks.y = element_blank(),
                      axis.ticks.length.y = unit(0.5, "cm"),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 5),family = "PublicoText-Bold", color = "black"),
+                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 20),family = "PublicoText-Bold", color = "black"),
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
@@ -229,7 +228,7 @@ saveGIF({
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
       ##mannually adjust the limits here to make the x axis line cover the label of the first and the last year
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2009-01-01", "2017-06-10"))) +                           
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2009-01-01", "2017-06-19"))) +                           
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
@@ -303,7 +302,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CMA-1_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CMA-1_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -313,7 +312,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CMA-1_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CMA-1_v1_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CMA-1_v3.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CMA-1_v3_compressed.gif")
 
 
 

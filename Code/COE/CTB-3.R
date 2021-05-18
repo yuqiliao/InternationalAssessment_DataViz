@@ -98,8 +98,8 @@ plotBreak = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 plotBreakLabel = plotBreak
 
 # define title/caption, etc.
-plotCaption <- "<span><sup>1</sup>In order to be consistent with the definition of \"business\" for bachelor's degree data, \"business\" is defined as business, management, marketing, and<br>related support services, as well as personal and culinary services.<br>
-SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),<br>Fall 2019, Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2020,</i> tables 322.40 and 322.50.</span>"
+plotCaption <- "<span><sup>1</sup> In order to be consistent with the definition of &ldquo;business&rdquo; for bachelor&rsquo;s degree data, &ldquo;business&rdquo; is defined as business, management, marketing,<br>and related support services, as well as personal and culinary services.<br>
+SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),<br>Fall 2019, Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2020,</i> tables 323.40 and 323.50.</span>"
 
 
 # plotCaption <- list()
@@ -114,7 +114,7 @@ SOURCE: U.S. Department of Education, National Center for Education Statistics, 
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Field of study"
 
-plotTitle <- c("Percentage distribution of master's degrees conferred by postsecondary<br>institutions in selected fields of study, by sex: 2018–19")
+plotTitle <- c("Percentage distribution of master’s degrees conferred by postsecondary<br>institutions in selected fields of study, by sex: 2018–19")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
@@ -133,7 +133,8 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      axis.ticks.length =  unit(.25, "cm"),
                      axis.ticks.y = element_blank(),
                      plot.title=element_markdown(size=31,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0, vjust = -3,lineheight=1, margin = margin(t = 15, b = 5), color = "black"),
+                     #hjust= 0.035 to make the subtitle (y-axis label) right-aligned 
+                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0.035, vjust = -3,lineheight=1, margin = margin(t = 15, b = 5), color = "black"),
                      plot.caption=element_markdown(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
@@ -278,7 +279,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTB-3_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "COE", "Results", "CTB-3_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my  solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
 #compressing	
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
@@ -287,7 +288,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))	
 }	
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTB-3_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTB-3_v1_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTB-3_v3.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTB-3_v3_compressed.gif")
 
  
 
