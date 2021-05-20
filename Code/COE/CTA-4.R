@@ -127,7 +127,7 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      axis.ticks.y = element_blank(),
                      axis.ticks.length.y = unit(0.5, "cm"),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
-                     plot.subtitle=element_text(size=26, margin = margin(t=15, b = 20),family = "PublicoText-Bold", color = "black"),
+                     plot.subtitle=element_text(size=26, margin = margin(t=25, b = 20),family = "PublicoText-Bold", color = "black"),
                      plot.caption=element_markdown(size=15, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
@@ -233,7 +233,7 @@ saveGIF({
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
       ##mannually adjust the limits here to make the x axis line cover the label of the first and the last year
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2009-01-01", "2018-06-27"))) +                           
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("2009-01-01", "2018-06-28"))) +                           
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
@@ -306,7 +306,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CTA-4_v3.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CTA-4_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -316,7 +316,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-4_v3.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-4_v3_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-4_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CTA-4_v4_compressed.gif")
 
 
 
