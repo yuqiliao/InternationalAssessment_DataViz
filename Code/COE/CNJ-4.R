@@ -37,12 +37,25 @@ here()
 ### Read in data  -----
 # the data has already been processed, based on the raw data from "tabn318.40.xls"
 df <- read_excel(path = here("Code", "COE", "Materials", "CNJ-4_cleanData.xlsx"),
-                 sheet = "processed")
+                          sheet = "processed")
 
+# df_original <- read_excel(path = here("Code", "COE", "Materials", "CNJ-4_cleanData.xlsx"),
+#                  sheet = "processed_original")
+# df_revised<- read_excel(path = here("Code", "COE", "Materials", "CNJ-4_cleanData.xlsx"),
+#                           sheet = "processed_revised")
 
 # reshape data
 df <- df %>% 
-  gather(key = Category, value = Value, -Year)
+  pivot_longer(cols = c(White, Black, Hispanic, White_original, Black_original, Hispanic_original),names_to = "Category") %>% 
+  rename(Value = value)
+
+# 
+# 
+# df_original <- df_original %>% 
+#   gather(key = Category, value = Value, -Year)
+# 
+# df_revised <- df_revised %>% 
+#   gather(key = Category, value = Value, -Year)
   # # add superscripts for some categories
   # mutate(Category = ifelse(Category %in% "Business", "Business^1", Category),
   #        Category = ifelse(Category %in% "Health professions and related programs", "Health professions<br>and related programs", Category),
@@ -55,17 +68,20 @@ df <- df %>%
   #                                      ifelse(Year %in% "2018–19" & Category %in% "Psychology", -30000, 0)))))
 
 ### Plotting ------
-
+# df <- df_original
 # make `Category` factors
 df$Category <- as.factor(df$Category)
 
 # process `Year`
-df$Year <- as.Date(as.character(df$Year),"%Y")
+df$Year <- as.Date(paste0(as.character(df$Year),"/05/01"),"%Y/%m/%d")
 # lastYear <- as.Date(as.character(df$Year[length(df$Year)]),"%Y") #this could dynamically identify the last year
 
 # function to create list of data sets from the original data frame (by state)
-states1<-unique((df$Year))
-myf<-function(mystate){as.data.frame(df[df$Year==as.Date(mystate),])}
+states1<-unique((df$Order))
+
+
+
+myf<-function(mystate){as.data.frame(df[df$Order==mystate,])}
 
 # use lapply to generate the list of data sets:
 my.list1<-lapply(states1,myf)
@@ -79,13 +95,62 @@ tf$Year <- as.Date(tf$Year,"%Y")
 temp <- tf[tf$.frame==1,]
 # replace column .frame with 81
 temp$.frame <- max(tf$.frame) + 1
-temp2 <- df %>% filter(Year == max(Year))
+temp2 <- df %>% filter(Order == max(Order))
 temp$Year <- NULL
+temp$Order <- NULL
 temp$Category <- NULL
 temp$Value <- NULL
-temp$nudge_y <- NULL
+#temp$nudge_y <- NULL
 temp <- cbind(temp2, temp)
 tf <- rbind(tf, temp)
+
+
+## because of the strange divider at year 2004, 2004's data could also be considered as the "last year data" and thus to be accurate, i need to mannually add back the three data points for the orginal assessment groups
+temp3 <- df %>% filter(Order == 27)
+tf[tf$Order==27 & tf$Category == "White_original", "Value"] <- temp3[temp3$Category=="White_original", "Value"]
+tf[tf$Order==27 & tf$Category == "Black_original", "Value"] <- temp3[temp3$Category=="Black_original", "Value"]
+tf[tf$Order==27 & tf$Category == "Hispanic_original", "Value"] <- temp3[temp3$Category=="Hispanic_original", "Value"]
+
+# check, now that the following query should return no NA under the "Value" column
+tf[tf$Order==27,]
+# 
+# # make `Category` factors
+# df_revised$Category <- as.factor(df_revised$Category)
+# 
+# # process `Year`
+# df_revised$Year <- as.Date(as.character(df_revised$Year),"%Y")
+# # lastYear <- as.Date(as.character(df$Year[length(df$Year)]),"%Y") #this could dynamically identify the last year
+# 
+# # function to create list of data sets from the original data frame (by state)
+# states1<-unique((df_revised$Year))
+# myf<-function(mystate){as.data.frame(df_revised[df_revised$Year==as.Date(mystate),])}
+# 
+# # use lapply to generate the list of data sets:
+# my.list1<-lapply(states1,myf)
+# 
+# # Apply tweenr: this adds in values between our data points to "smooth" the line
+# tf2 <- tween_states(my.list1, tweenlength= 1, statelength=0, ease='linear',nframes=68)
+# tf2$Year <- as.Date(tf$Year,"%Y")
+# 
+# # needed to add in the last set of data points so that they match exactly the final year
+# # grab the first set of rows as data shells
+# temp <- tf2[tf2$.frame==1,]
+# # replace column .frame with 81
+# temp$.frame <- max(tf2$.frame) + 1
+# temp2 <- df_revised %>% filter(Year == max(Year))
+# temp$Year <- NULL
+# temp$Category <- NULL
+# temp$Value <- NULL
+# temp$nudge_y <- NULL
+# temp <- cbind(temp2, temp)
+# tf2 <- rbind(tf2, temp)
+
+
+
+
+
+
+
 
 # tf$nudge_y <- ifelse(tf$Category %in% "Social sciences<br>and history", 15000,
 #                      ifelse(tf$Category %in% "Engineering",13000,
@@ -98,14 +163,19 @@ tf <- rbind(tf, temp)
 
 # color  
 # nces_palette =  c("#fbab18", "#3EC7F4", "#3FA66C","#242953")
-cols <- c("#fbab18", "#3EC7F4", "#3FA66C","#242953", "#971b2f", "#84329B")
+cols <- c("#fbab18", "#fbab18", "#3EC7F4","#3EC7F4", "#3FA66C", "#3FA66C")
+#cols <- c("#fbab18", "#3EC7F4", "#3FA66C")
 
-plotCaption <- "<span><sup>1</sup> &ldquo;Business&rdquo; is defined as business, management, marketing, and related support services, as well as personal and culinary services.<br>
-SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),<br>Fall 2010 through Fall 2019, Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2020,</i> table 322.10.</span>"
 
-plotSubtitle <- "Number of degrees"
+plotCaption <- "<span>NAEP scores range from 0 to 500. Several changes were made to the long-term trend assessment in 2004 to align it with current assessment practices and policies<br>applicable to the NAEP main assessments. This included allowing accommodations for students with disabilities and for English learners. These changes have been<br>carried forward in more recent data collections.Race categories exclude persons of Hispanic ethnicity.<br>
+SOURCE: U.S. Department of Education, National Center for Education Statistics, National Assessment of Educational Progress (NAEP), <i style='font-family: PublicoText-Italic'>NAEP 2020 Trends in Academic<br>Progress</i>; and 2020 NAEP Long-Term Trend Mathematics Assessment. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021</i>, table 222.85.</span>"
+ 
+# plotCaption <- "<span><sup>1</sup> &ldquo;Business&rdquo; is defined as business, management, marketing, and related support services, as well as personal and culinary services.<br>
+# SOURCE: U.S. Department of Education, National Center for Education Statistics, Integrated Postsecondary Education Data System (IPEDS),<br>Fall 2010 through Fall 2019, Completions component. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2020,</i> table 322.10.</span>"
 
-plotTitle <- c("Number of bachelor’s degrees conferred by postsecondary institutions\nin selected fields of study: 2009–10 through 2018–19")
+plotSubtitle <- "Score"
+plotTitle <- c("Average mathematics scale scores on the long-term trend\nNational Assessment of Educational Progress (NAEP) for 13-year-olds,\nby race/ethnicity: Selected years, 1978 through 2020")
+
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
@@ -114,11 +184,12 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      panel.grid.major.y = element_line(size = 0.25, color = "#576F7F", linetype = "solid"), 
                      panel.border = element_blank(),
                      axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "black"),
-                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.3, vjust = -1, family = "PublicoText-Roman"),
+                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.5, vjust = -1, family = "PublicoText-Roman"),
                      axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
                      axis.line.x=element_line(size = 0.25, color = "#576F7F"),
                      #axis.line.y=element_line(size = 1),
-                     axis.ticks.x = element_blank(),  
+                     axis.ticks.x = element_line(size = 1, color = "#576F7F"),  
+                     axis.ticks.length.x = unit(0.25, "cm"),
                      axis.ticks.y = element_blank(),
                      axis.ticks.length.y = unit(0.5, "cm"),
                      plot.title=element_text(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
@@ -127,7 +198,7 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      #strip.text.x = element_text(size=18, angle = 0, hjust = .5, family = "PublicoText-Roman"),
                      #strip.background = element_rect(fill = "#f1f1f1", colour = NA),
                      legend.position="none",
-                     plot.margin = margin(t = 0,r = 200, b = 0, l = 0, unit = "pt") #make enough white space to the right for geom_text labels
+                     plot.margin = margin(t = 0,r = 100, b = 0, l = 0, unit = "pt") #make enough white space to the right for geom_text labels
 )
 
 
@@ -140,13 +211,15 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
 
 
 # x axis break labels and levels
-xAxisBreaks <- unique(df$Year)
-xAxisLabels <- year(unique(df$Year))
+xAxisYears <- c("1978", "1982", "1986", "1990", "1994", "1999", "2004", "2008", "2012","2020")
+
+xAxisBreaks <- as.Date(paste0(xAxisYears,"/05/01"),"%Y/%m/%d")
+xAxisLabels <- year(xAxisBreaks)
 
 
 # y axis break labels and levels
 yAxisBreaks <- seq(175, 350, by = 25)
-yAxisLabels <- paste0(format(seq(175, 350, by = 25), big.mark = ","))
+yAxisLabels <- c(0, paste0(format(seq(175, 350, by = 25), big.mark = ","))[2:7] ,500) 
 #yAxisLabels <- paste0("$",yAxisLabels)
 #yAxisLabels <- c(yAxisLabels[1:length(yAxisLabels)-1], paste0("$",yAxisLabels[length(yAxisLabels)]))
 yAxisLimits <- c(175,max(yAxisBreaks)* 1.03) 
@@ -223,19 +296,31 @@ saveGIF({
     print(paste0("working on the ", i, "th frame"))
     g <- ggplot(data = subset(tf, .frame <= i), aes(x = Year, y = Value, .frame = i)) +
       geom_line(aes(group=Category, color=Category), size=2.5) +
+      #add the vertical line to divide original and the revised sections
+      geom_vline(xintercept = date("2004-05-01"), linetype="solid", color = "#576F7F", size=1) +
       ##mannually adjust the limits here to make the x axis line cover the label of the first and the last year
-      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("1973-02-25", "2020-07-21"))) +
+      scale_x_date(labels=xAxisLabels, expand = c(0.01, 0), breaks=xAxisBreaks,limits =as.Date(c("1977-08-01", "2020-07-21"))) +
       scale_y_continuous(labels=yAxisLabels, expand = c(0, 0), breaks=yAxisBreaks,limits = yAxisLimits) +
       theme_minimal() + theme_white + 
       scale_color_manual(values=cols) + scale_fill_manual(values=cols) +
       labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, 
            caption = plotCaption) 
     
-    # when i == 1, geom_dl wont' work
-    if(i!=1){
+    # because when i==105 there are six data points, and I don't have to display all six labels, i just needed three
+    if(i!=105){
       g <- g +
-        geom_richtext(data = subset(tf, .frame == i), aes(label = Category, color = Category), lineheight = 0.5, hjust=0, vjust=0.5, show.legend = FALSE, size = 7, nudge_x = 40, nudge_y = subset(tf, .frame == i)$nudge_y, family = "PublicoText-Roman", fill = NA, label.color = NA) +
+        # note the special treatment of <data = subset(tf, .frame == i & !is.na(Value)) , aes(label = c("White", "Black", "Hispanic")> to avoid displaying "White_orginal" and so on.
+        geom_richtext(data = subset(tf, .frame == i & !is.na(Value)) , aes(label = c("White", "Black", "Hispanic"), color = Category), lineheight = 0.5, hjust=0, vjust=0.5, show.legend = FALSE, size = 7, nudge_x = 40, nudge_y = subset(tf, .frame == i)$nudge_y, family = "PublicoText-Roman", fill = NA, label.color = NA) +
         coord_cartesian(clip = 'off') #to avoid the label being cut off in the margin area
+    }
+    
+    
+    #when i == 105, it means year == "2004-05-01", where the vertical dividing line is
+    g <- g +
+      geom_richtext(data = data.frame(label = c("Original assessment<br>format")), aes(label = label, x = date("1994-05-01"), y = 200), hjust=0, vjust=0, size = 5, family = "PublicoText-Roman", fill = NA, label.color = NA)
+    if(i >= 105){
+      g <- g +
+        geom_richtext(data = data.frame(label = c("Revised assessment<br>format")), aes(label = label, x = date("2006-05-01"), y = 200), hjust=0, vjust=0, size = 5, family = "PublicoText-Roman", fill = NA, label.color = NA)
     }
     
     # add geom_point to g based on i
@@ -243,13 +328,15 @@ saveGIF({
     Current_years <- unique(subset(tf, .frame <= i)$Year)
     a <- X_axis_years %in% Current_years
     
-    # add the geom_point for the first year (for all years)
+    # add the geom_point for the first year (for all frames)
     g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[1]),aes(group=Category, color=Category), size=6)
     
     # add the geom_point for the last year (if i is the last frame)
     if(i == max(tf$.frame)) {
       g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[length(X_axis_years)]),aes(group=Category, color=Category), size=6)
     }
+    
+    
     
     # # add geom_text to g based on i
     # geom_text(data = subset(tf, Year %in% X_axis_years[a]), size = 9, 
@@ -281,9 +368,9 @@ saveGIF({
       grid::grid.draw(plot);
       # let the last plot pause a bit more
       if (i == pause_frames){
-        replicate(2,gifReplicate(plot))
+        replicate(200,gifReplicate(plot))
       } else {
-        replicate(3,gifReplicate(plot)) #it doesn't apply here
+        replicate(30,gifReplicate(plot)) #it doesn't apply here
       }
       
     } else {
