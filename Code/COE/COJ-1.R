@@ -57,7 +57,7 @@ data$Category <- factor(data$Category, levels = order)
 data$Year <- factor(data$Year, labels = c(2010,2020))
 
 # fix labels
-data$label <- ifelse(data$Category %in% c("American Indian/ Alaska Native"), paste0(round(data$Percent,1),"!"), round(data$Percent,1))
+data$label <- ifelse(data$Category %in% c("American Indian/ Alaska Native") & data$Year %in% c(2020), paste0(round(data$Percent,1),"!"), format(round(data$Percent,1), nsmall = 1))
 
 # # not necessary here
 # data$labelRoundToTenth <- ifelse(round(data$Percent,0) == 0, "#", round(data$Percent,0))
@@ -86,8 +86,8 @@ plotBreakLabel = plotBreak
 
 # define title/caption, etc.
 plotCaption <- "<span>!Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
-The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a diploma<br>or an alternative credential such as a GED certificate). Data are based on sample surveys of the  civilian noninstitutionalized population, which excludes<br>persons in the military and persons living in institutions (e.g., prisons or nursing facilities).<br>
-SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020.See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.7.</span>"
+NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
+SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
 
 
 
@@ -103,7 +103,7 @@ SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (C
 #plotSubtitle <- "Education system"
 plotSubtitle <- "Percent"
 
-plotTitle <- c("Status dropout rates of 16- to 24-year-olds, by<br>race/ethnicity: 2010 and 2020")
+plotTitle <- c("Status dropout rates of 16- to 24-year-olds, by race/ethnicity: 2010 and 2020")
 #plotTitle <- getWrappedText(plotTitle, width = 350, ps = 10)
 
 # NCES theme, which gets slightly adjusted for each visualization
@@ -114,18 +114,18 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
                      panel.grid = element_blank(),
                      axis.title.x=element_text(size=24, margin = margin(t=15, b = 5), hjust = .5, color = "black", family = "PublicoText-Bold"),
                      #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
-                     axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "PublicoText-Roman"),
+                     axis.text.x=element_text(size=19.5, angle = 0, hjust = 0.5, family = "PublicoText-Roman"),
                      axis.text.y=element_markdown(size=20, hjust = 1, family = "PublicoText-Roman", color = "black"),
                      axis.line.x = element_line(size = 1, color = "#686868"),
-                     axis.line.y = element_blank(),
+                     axis.line.y = element_line(size = 1, color = "#686868"),
                      axis.ticks.x = element_line(size = 1, "#686868"),
                      axis.ticks.length =  unit(.25, "cm"),
-                     axis.ticks.y = element_blank(),
-                     plot.title=element_markdown(size=31,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
+                     axis.ticks.y = element_line(size = 1, "#686868"),
+                     plot.title=element_markdown(size=30,family = "PublicoText-Bold", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
                      #hjust= 0.035 to make the subtitle (y-axis label) right-aligned 
-                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0.035, vjust = -3,lineheight=1, margin = margin(t = 15, b = 5), color = "black"),
+                     plot.subtitle=element_text(size=24,family = "PublicoText-Bold", hjust= 0, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
                      plot.caption=element_markdown(size=16, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "PublicoText-Roman"),
-                     plot.margin = unit(c(t = 0.3, r = 1, b = 0.3, l = 1), "cm"),
+                     plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
                      legend.position ="bottom",
                      legend.justification = "center",
                      legend.box.just = "left",
@@ -142,7 +142,7 @@ ggrepelSeed <- 1234
 # function to wrap x axis labels
 
 autoWrap <- function(x) {
-  str_wrap(x, width = 10)
+  str_wrap(x, width = 16)
 }
 
 
@@ -213,10 +213,10 @@ saveGIF({
       # coord_flip(clip = "off") +
       scale_y_continuous(breaks = plotBreak,
                          labels = plotBreakLabel,
-                         expand = c(0, 0, 0, 0),
+                         expand = c(0, 0),
                          limits = c(0,50)) +
       scale_x_discrete(labels = autoWrap) +
-      labs(x = "", y = "", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
+      labs(x = "Race/ethnicity", y = "", title = plotTitle, subtitle = plotSubtitle, caption = plotCaption) +
       theme_bw() +
       theme_white 
   
@@ -243,7 +243,7 @@ saveGIF({
     if (i <= 51) {
       
       g2 <- ggdraw(g) + 
-        geom_rect(aes(xmin = 0.52, xmax = 0.6, ymin = 0.18, ymax = 0.22),
+        geom_rect(aes(xmin = 0.52, xmax = 0.6, ymin = 0.21, ymax = 0.25),
                   colour = "white", fill = "white") 
     } else {
       g2 <- ggdraw(g)
@@ -279,7 +279,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "COJ-1_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "COE", "Results", "COJ-1_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
 #compressing	
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
@@ -288,7 +288,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))	
 }	
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v1_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v4_compressed.gif")
 
  
 

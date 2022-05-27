@@ -167,7 +167,7 @@ cols <- c("#fbab18", "#fbab18", "#3EC7F4","#3EC7F4", "#3FA66C", "#3FA66C")
 #cols <- c("#fbab18", "#3EC7F4", "#3FA66C")
 
 
-plotCaption <- "<span>NAEP scores range from 0 to 500. Several changes were made to the long-term trend assessment in 2004 to align it with current assessment practices and policies<br>applicable to the NAEP main assessments. This included allowing accommodations for students with disabilities and for English learners. These changes have been<br>carried forward in more recent data collections.Race categories exclude persons of Hispanic ethnicity.<br>
+plotCaption <- "<span>NOTE: NAEP scores range from 0 to 500. Several changes were made to the long-term trend assessment in 2004 to align it with current assessment practices and<br>policies applicable to the NAEP main assessments. This included allowing accommodations for students with disabilities and for English learners. These changes have<br>been carried forward in more recent data collections. Race categories exclude persons of Hispanic ethnicity.<br>
 SOURCE: U.S. Department of Education, National Center for Education Statistics, National Assessment of Educational Progress (NAEP), <i style='font-family: PublicoText-Italic'>NAEP 2020 Trends in Academic<br>Progress</i>; and 2020 NAEP Long-Term Trend Mathematics Assessment. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021</i>, table 222.85.</span>"
  
 # plotCaption <- "<span><sup>1</sup> &ldquo;Business&rdquo; is defined as business, management, marketing, and related support services, as well as personal and culinary services.<br>
@@ -184,10 +184,10 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
                      panel.grid.major.y = element_line(size = 0.25, color = "#576F7F", linetype = "solid"), 
                      panel.border = element_blank(),
                      axis.title.x=element_text(size=26, margin = margin(t=15, b = 5), hjust = .5, family = "PublicoText-Bold", color = "black"),
-                     axis.text.x=element_text(size=22, angle = 0, hjust = 0.5, vjust = -1, family = "PublicoText-Roman"),
+                     axis.text.x=element_text(size=19, angle = 0, hjust = 0.5, vjust = -1, family = "PublicoText-Roman", margin = margin(b=10)),
                      axis.text.y=element_text(size=22, family = "PublicoText-Roman"),
                      axis.line.x=element_line(size = 0.25, color = "#576F7F"),
-                     #axis.line.y=element_line(size = 1),
+                     axis.line.y=element_line(size = 0.25, color = "#576F7F"),
                      axis.ticks.x = element_line(size = 1, color = "#576F7F"),  
                      axis.ticks.length.x = unit(0.25, "cm"),
                      axis.ticks.y = element_blank(),
@@ -211,7 +211,7 @@ theme_white <- theme(text = element_text(family="PublicoText-Roman", color = "bl
 
 
 # x axis break labels and levels
-xAxisYears <- c("1978", "1982", "1986", "1990", "1994", "1999", "2004", "2008", "2012","2020")
+xAxisYears <- c("1978", "1982", "1986", "1990", "1992", "1994", "1996", "1999", "2004", "2008", "2012","2020")
 
 xAxisBreaks <- as.Date(paste0(xAxisYears,"/05/01"),"%Y/%m/%d")
 xAxisLabels <- year(xAxisBreaks)
@@ -222,7 +222,7 @@ yAxisBreaks <- seq(175, 350, by = 25)
 yAxisLabels <- c(0, paste0(format(seq(175, 350, by = 25), big.mark = ","))[2:7] ,500) 
 #yAxisLabels <- paste0("$",yAxisLabels)
 #yAxisLabels <- c(yAxisLabels[1:length(yAxisLabels)-1], paste0("$",yAxisLabels[length(yAxisLabels)]))
-yAxisLimits <- c(175,max(yAxisBreaks)* 1.03) 
+yAxisLimits <- c(175,max(yAxisBreaks)) 
 
 
 
@@ -306,6 +306,10 @@ saveGIF({
       labs(x="Year", y="", title = plotTitle, subtitle = plotSubtitle, 
            caption = plotCaption) 
     
+    
+    
+    
+    
     # because when i==105 there are six data points, and I don't have to display all six labels, i just needed three
     if(i!=105){
       g <- g +
@@ -317,10 +321,10 @@ saveGIF({
     
     #when i == 105, it means year == "2004-05-01", where the vertical dividing line is
     g <- g +
-      geom_richtext(data = data.frame(label = c("Original assessment<br>format")), aes(label = label, x = date("1994-05-01"), y = 200), hjust=0, vjust=0, size = 5, family = "PublicoText-Roman", fill = NA, label.color = NA)
+      geom_richtext(data = data.frame(label = c("Original assessment<br>format")), aes(label = label, x = date("1994-05-01"), y = 200), hjust=0, vjust=0, size = 6, family = "PublicoText-Roman", fill = NA, label.color = NA)
     if(i >= 105){
       g <- g +
-        geom_richtext(data = data.frame(label = c("Revised assessment<br>format")), aes(label = label, x = date("2006-05-01"), y = 200), hjust=0, vjust=0, size = 5, family = "PublicoText-Roman", fill = NA, label.color = NA)
+        geom_richtext(data = data.frame(label = c("Revised assessment<br>format")), aes(label = label, x = date("2006-05-01"), y = 200), hjust=0, vjust=0, size = 6, family = "PublicoText-Roman", fill = NA, label.color = NA)
     }
     
     # add geom_point to g based on i
@@ -336,6 +340,24 @@ saveGIF({
       g <- g + geom_point(data = subset(tf, Year %in% X_axis_years[length(X_axis_years)]),aes(group=Category, color=Category), size=6)
     }
     
+    ### add y-axis breaks
+    # define y-axis line objects and add them to the plot
+    gline <- linesGrob(y = c(0, 1),x = c(-.015, .015),  gp = gpar(col = "#576F7F", lwd = 1)) 
+    gline2 <- linesGrob(y = c(0, 1),x = c(0, 0),  gp = gpar(col = "white", lwd = 2))
+    # y axis break - lower end
+    g <- g +
+      annotation_custom(gline2, ymin=186, ymax=189, xmin=-Inf, xmax=Inf) +
+      annotation_custom(gline, ymin=187, ymax=191, xmin=-Inf, xmax=Inf) + 
+      annotation_custom(gline, ymin=184, ymax=188, xmin=-Inf, xmax=Inf) +
+      # y axis break - higher end
+      annotation_custom(gline2, ymin=336, ymax=339, xmin=-Inf, xmax=Inf) +
+      annotation_custom(gline, ymin=337, ymax=341, xmin=-Inf, xmax=Inf) + 
+      annotation_custom(gline, ymin=334, ymax=338, xmin=-Inf, xmax=Inf) 
+    
+    # grobs are placed under the axis lines....
+    plot <- ggplotGrob(g)
+    plot$layout$clip[plot$layout$name=="panel"] <- "off"
+    plot$layout$z[plot$layout$name=="panel"] = 18  # Note that z for panel is 1.  Change it to something bigger so that the line will overwrite the grid.
     
     
     # # add geom_text to g based on i
@@ -347,7 +369,7 @@ saveGIF({
     
     #grob
     # ggplotGrob is used to capture the figure in the graphics device, then shift the plot labels to the left most part of the plot
-    plot <- ggplotGrob(g)
+    #plot <- ggplotGrob(g)
     plot$layout$l[plot$layout$name == "title"] <- 4
     plot$layout$l[plot$layout$name == "caption"] <- 4
     plot$layout$l[plot$layout$name == "subtitle"] <- 4
@@ -384,7 +406,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "CNJ-4_v1.gif"),interval = .02, ani.width = 1200, ani.height = 800)
+movie.name=here("Code", "COE", "Results", "CNJ-4_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800)
 
 #compressing
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
@@ -394,7 +416,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))
 }
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CNJ-4_v1.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CNJ-4_v1_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CNJ-4_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/CNJ-4_v4_compressed.gif")
 
 
 
