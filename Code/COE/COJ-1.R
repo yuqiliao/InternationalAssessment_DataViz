@@ -85,7 +85,7 @@ plotBreak = c(0, 10, 20, 30, 40, 50)
 plotBreakLabel = plotBreak
 
 # define title/caption, etc.
-plotCaption <- "<span>!Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
+plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
 SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
 
@@ -279,7 +279,7 @@ saveGIF({
   print(Sys.time())
 },
 # specify the pathway and name of the gif output, as well as the interval, width, and height
-movie.name=here("Code", "COE", "Results", "COJ-1_v4.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
+movie.name=here("Code", "COE", "Results", "COJ-1_v5.gif"),interval = .02, ani.width = 1200, ani.height = 800) #unfortunately, when `ggdraw` is used, the first time grid::grid.draw(g2) is run, there will be a blank page saved into the graphic device. my solution is to manually delete the first blank frame in Photoshop AFTER the compressed gif is generated. I previously tried to add an if statement to use grid::grid.draw(g) (instead of g2) for the first frame; but it is not a perfect solution since i can't add a white sqaure on top of it. 
 #compressing	
 gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){	
   command <-  sprintf("gifsicle -O3 %s < %s > %s", extra.opts, ingif, outgif)	
@@ -288,7 +288,7 @@ gif_compress <- function(ingif, outgif, show=TRUE, extra.opts=""){
   system.fun(ifelse(.Platform$OS.type == "windows", sprintf("\"%s\"", shQuote(command)), command))	
 }	
 
-gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v4.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v4_compressed.gif")
+gif_compress("/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v5.gif","/Users/Yuqi/Desktop/Files/AIR/GIT/InternationalAssessment_DataViz/Code/COE/Results/COJ-1_v5_compressed.gif")
 
  
 
