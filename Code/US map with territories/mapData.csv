@@ -1,0 +1,57 @@
+﻿id,value,label,legend,unrounded_data
+Montana,A,+2.70%,A = Increase 2.00% or more,0.026960315
+Idaho,A,+2.17%,B = 1.00%-1.99% increase,0.021708103
+Pennsylvania,A,+2.06%,C = Change less than 1.00%,0.02056799
+Arizona,B,+1.96%,D = 1.00%-1.99% decrease,0.01959874
+Vermont,B,+1.91%,E  = Decrease 2.00% or more,0.01910171
+Alabama,B,+1.87%,F = Not Available,0.018662898
+South Carolina,B,+1.83%,,0.018334183
+North Dakota,B,+1.66%,,0.016606498
+Utah,B,+1.51%,,0.015095665
+Florida,B,+1.49%,,0.014857935
+South Dakota,B,+1.25%,,0.012474385
+Tennessee,B,+1.17%,,0.011674704
+Texas,B,+1.04%,,0.010386937
+Nevada,C,+0.89%,,0.008914725
+Nebraska,C,+0.88%,,0.008829771
+Iowa,C,+0.79%,,0.007904772
+North Carolina,C,+0.76%,,0.007627783
+Kansas,C,+0.76%,,0.007626362
+Missouri,C,+0.75%,,0.007544673
+Arkansas,C,+0.67%,,0.006703612
+Oklahoma,C,+0.66%,,0.006602671
+Georgia,C,+0.63%,,0.006277402
+New Hampshire,C,+0.58%,,0.005786058
+Ohio,C,+0.45%,,0.00447669
+Maine,C,+0.44%,,0.004406947
+Michigan,C,+0.42%,,0.004150928
+Wyoming,C,+0.35%,,0.003460096
+Indiana,C,+0.26%,,0.002573591
+Alaska,C,+0.06%,,0.000554392
+Delaware,C,+0.05%,,0.00051415
+New Mexico,C, -0.02%,,-0.000173589
+Massachusetts,C, -0.06%,,-0.000577187
+Connecticut,C, -0.07%,,-0.000730762
+Wisconsin,C, -0.09%,,-0.00085174
+New Jersey,C, -0.11%,,-0.001149233
+Maryland,C, -0.12%,,-0.001207895
+Mississippi,C, -0.14%,,-0.001416543
+Virginia,C, -0.15%,,-0.001457289
+Minnesota,C, -0.18%,,-0.001808314
+Colorado,C, -0.29%,,-0.002946108
+Oregon,C, -0.40%,,-0.00400537
+Rhode Island,C, -0.44%,,-0.004440166
+West Virginia,C, -0.48%,,-0.004765093
+Kentucky,C, -0.69%,,-0.00693676
+Illinois,C, -0.94%,,-0.009360402
+District of Columbia ,D, -1.08%,,-0.010847435
+Louisiana,D, -1.43%,,-0.014331674
+California,D, -1.72%,,-0.01721229
+Hawaii,D, -1.85%,,-0.018493434
+New York,E, -2.23%,,-0.022348919
+Puerto Rico,E, -6.11%,,-0.061060804
+Bureau of Indian Education,E, -6.53%,,-0.065286257
+U.S. Virgin Islands,E, -6.90%,,-0.069043937
+American Samoa,F,,,
+Guam,F,,,
+Washington ,F,,,
