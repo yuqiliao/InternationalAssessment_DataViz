@@ -23,7 +23,7 @@ plotSubtitle <- "Education system"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
 # SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
-cols <- c("#9aa9b2", "#00378c")
+cols <- c("#489FDF", "#071D49")
 xAxisBreaks = c(0, 100, 200, 300, 400, 500)
 xAxisBreaksLabel = c(0, 300, 400, 500, 600, 700)
 xAxisBreaksMin <- sum(head(xAxisBreaks, 2))/2
@@ -117,10 +117,17 @@ teaching_data <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2
 #   pivot_longer(cols = contains("_se"), names_to = "SE_category", values_to = "SE")
 # teaching_footnote <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching practice.xlsx"), sheet = 2) 
 
+
 teaching_data <- teaching_data%>% 
   separate(col = "Value_category", into = c("Category", "value"), sep = "_")
 
-#teaching_data$Category <- factor(teaching_data$Category)
+teaching_category_order <- teaching_data %>% 
+  filter(Category == "ELA") %>% 
+  arrange(Value) %>% 
+  pull(Teaching_practice)
+  
+
+teaching_data$Teaching_practice <- factor(teaching_data$Teaching_practice, levels = teaching_category_order)
 
 #viz
 
@@ -129,9 +136,9 @@ plotSubtitle <- "Teaching practice"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
 # SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
-cols <- c("#fbab18", "#3EC7F4", "#3FA66C")
+cols <- c("#FBB03B", "#971B2F", "#009A44")
 xAxisBreaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-xAxisBreaksLabel = xAxisBreaks
+xAxisBreaksLabel = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, "100%")
 # xAxisBreaksMin <- sum(head(xAxisBreaks, 2))/2
 # xAxisBreaksMax <- sum(tail(xAxisBreaks, 2))/2
 
@@ -159,7 +166,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   plot.subtitle=element_text(size=24,family = "Arial", hjust= 0, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
   plot.caption=element_markdown(size=14, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Arial"),
   plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
-  legend.position = c(0.8, 0.8), #top-right corner
+  legend.position = c(0.8, 0.5), #center-right corner
   # legend.justification = "center",
   # legend.box.just = "left",
   legend.title = element_blank(),
