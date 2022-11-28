@@ -131,7 +131,7 @@ teaching_data$Teaching_practice <- factor(teaching_data$Teaching_practice, level
 
 #viz
 
-plotTitle <- c("<span>Percentage of eighth-grade teachers who often or always use ICT<br>by teaching practice and selected subject: 2018</span>")
+plotTitle <- c("<span>Percentage of U.S. eighth-grade teachers who often or always use ICT<br>by selected teaching practice and subject: 2018</span>")
 plotSubtitle <- "Teaching practice"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
