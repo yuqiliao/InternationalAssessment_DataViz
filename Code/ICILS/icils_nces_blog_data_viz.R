@@ -18,7 +18,7 @@ cil_avg <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2018_ci
 cil_avg <- cil_avg - 200
 
 # viz
-plotTitle <- c("Average CIL scores of 8th-grade students, by education system: 2018")
+plotTitle <- c("Average CIL scores of eighth-grade students, by education system: 2018")
 plotSubtitle <- "Education system"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
