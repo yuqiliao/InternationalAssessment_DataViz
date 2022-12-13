@@ -23,7 +23,8 @@ plotSubtitle <- "Education system"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
 # SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
-cols <- c("#489FDF", "#071D49")
+cols <- c("#0178c8", "#0f3156") 
+#cols <- c("#489FDF", "#071D49")
 xAxisBreaks = c(0, 100, 200, 300, 400, 500)
 xAxisBreaksLabel = c(0, 300, 400, 500, 600, 700)
 xAxisBreaksMin <- sum(head(xAxisBreaks, 2))/2
@@ -105,7 +106,7 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_cil.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_cil-new.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
 
 
 ### viz 2 #####
@@ -136,7 +137,8 @@ plotSubtitle <- "Teaching practice"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
 # SOURCE: U.S. Department of Commerce, Census Bureau, Current Population Survey (CPS), October, 2010 and 2020. See <i style='font-family: PublicoText-Italic'>Digest of Education Statistics 2021,</i> <br>table 219.73.</span>"
-cols <- c("#FBB03B", "#971B2F", "#009A44")
+cols <- c("#0f3156", "#014d97", "#0178c8")
+#cols <- c("#FBB03B", "#971B2F", "#009A44")
 xAxisBreaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 xAxisBreaksLabel = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, "100%")
 # xAxisBreaksMin <- sum(head(xAxisBreaks, 2))/2
@@ -208,4 +210,4 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching-new.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
