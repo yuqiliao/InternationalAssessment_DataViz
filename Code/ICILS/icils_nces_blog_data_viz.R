@@ -18,7 +18,7 @@ cil_avg <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2018_ci
 cil_avg <- cil_avg - 200
 
 # viz
-plotTitle <- c("Average CIL scores of eighth-grade students, by education system: 2018")
+plotTitle <- c("<span>Figure 1. Average CIL scores of eighth-grade students, by education<br>system: 2018</span>")
 plotSubtitle <- "Education system"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
@@ -39,11 +39,12 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   text = element_text(size=20, family="Arial", color = "black"),
   panel.background=element_blank(),
   panel.grid = element_blank(),
-  #axis.title.x=element_text(size=24, margin = margin(t=15, b = 5), hjust = .5, color = "black", family = "PublicoText-Bold"),
-  axis.title = element_blank(),
+  axis.title.x=element_text(size=22, margin = margin(t=15, b = 5), hjust = .5, color = "black", family = "Arial"),
+  #axis.title = element_blank(),
   #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
   axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "Arial"),
-  axis.text.y=element_markdown(size=18, hjust = 1, family = "Arial", color = "black"),
+  #conditionally formatting the benchmarking jurisdictions
+  axis.text.y=element_text(size=18, angle = 0, hjust = 1, family = "Arial", color = "black", face = c("plain", "plain","plain","plain","plain","plain","italic","plain","plain","plain","plain","plain","italic","plain")),
   axis.line.x = element_line(size = 1, color = "#686868"),
   axis.line.y = element_line(size = 1, color = "#686868"),
   axis.ticks.x = element_line(size = 1, "#686868"),
@@ -51,7 +52,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   axis.ticks.y =  element_blank(),
   plot.title=element_markdown(size=26,family = "Arial", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
   #hjust= 0.035 to make the subtitle (y-axis label) right-aligned 
-  plot.subtitle=element_text(size=24,family = "Arial", hjust= 0, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
+  plot.subtitle=element_text(size=22,family = "Arial", hjust= 0.02, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
   plot.caption=element_markdown(size=14, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Arial"),
   plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
   legend.position ="none",
@@ -94,7 +95,7 @@ gg <- ggplot(data = cil_data, mapping = (aes(y = fct_reorder(Country, ValuePlot)
   annotate(geom = "segment", x = 35, xend = 55, y = -0.3, yend = 0.3, color = "#686868", size = 1) +
   annotate(geom = "segment", x = 45, xend = 65, y = -0.3, yend = 0.3, color = "#686868", size = 1) +
   #title
-  labs(x = "", y = "", title = plotTitle, subtitle = plotSubtitle, 
+  labs(x = "Score", y = "", title = plotTitle, subtitle = plotSubtitle, 
        #caption = plotCaption
        ) 
 gg
@@ -106,24 +107,26 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_cil-new.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_cil-v2.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
 
 
 ### viz 2 #####
 
 ##read in
 teaching_data <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching practice.xlsx"), sheet = 1) %>% 
-  pivot_longer(cols = contains("_value"), names_to = "Value_category", values_to = "Value") 
+  pivot_longer(cols = contains("_value"), names_to = "Value_category", values_to = "Value")
 #   %>% 
 #   pivot_longer(cols = contains("_se"), names_to = "SE_category", values_to = "SE")
 # teaching_footnote <- read_xlsx(path = paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching practice.xlsx"), sheet = 2) 
 
 
 teaching_data <- teaching_data%>% 
-  separate(col = "Value_category", into = c("Category", "value"), sep = "_")
+  separate(col = "Value_category", into = c("Category", "value"), sep = "_") %>% 
+  mutate(Category = ifelse (Category == "ELA", "English language arts", Category))
+
 
 teaching_category_order <- teaching_data %>% 
-  filter(Category == "ELA") %>% 
+  filter(Category == "English language arts") %>% 
   arrange(Value) %>% 
   pull(Teaching_practice)
   
@@ -132,7 +135,7 @@ teaching_data$Teaching_practice <- factor(teaching_data$Teaching_practice, level
 
 #viz
 
-plotTitle <- c("<span>Percentage of U.S. eighth-grade teachers who often or always use ICT<br>by selected teaching practice and subject: 2018</span>")
+plotTitle <- c("<span>Figure 2. Percentage of U.S. eighth-grade teachers who often or always use<br>ICT, by selected teaching practice and subject: 2018</span>")
 plotSubtitle <- "Teaching practice"
 # plotCaption <- "<span>! Interpret data with caution. The coefficient of variation (CV) for this estimate is between 30 and 50 percent.<br>
 # NOTE: The status dropout rate is the percentage of 16- to 24-year-olds who are not enrolled in high school and who lack a high school credential (either a<br>diploma or an alternative credential such as a GED certificate). Data are based on sample surveys of the civilian noninstitutionalized population, which<br>excludes persons in the military and persons living in institutions (e.g., prisons or nursing facilities). Pacific Islander student group is not shown as<br>reporting standards were not met.<br>
@@ -140,7 +143,7 @@ plotSubtitle <- "Teaching practice"
 cols <- c("#0f3156", "#014d97", "#0178c8")
 #cols <- c("#FBB03B", "#971B2F", "#009A44")
 xAxisBreaks = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
-xAxisBreaksLabel = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, "100%")
+#xAxisBreaksLabel = c(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, "100%")
 # xAxisBreaksMin <- sum(head(xAxisBreaks, 2))/2
 # xAxisBreaksMax <- sum(tail(xAxisBreaks, 2))/2
 
@@ -154,7 +157,8 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   panel.background=element_blank(),
   panel.grid = element_blank(),
   #axis.title.x=element_text(size=24, margin = margin(t=15, b = 5), hjust = .5, color = "black", family = "PublicoText-Bold"),
-  axis.title = element_blank(),
+  #axis.title = element_blank(),
+  axis.title.x=element_text(size=22, margin = margin(t=15, b = 5), hjust = .5, color = "black", family = "Arial"),
   #axis.title.y=element_text(size=10, margin = margin(t=0, b = 5),hjust = 0,vjust = 1, angle = 0),
   axis.text.x=element_text(size=18, angle = 0, hjust = 0.5, family = "Arial"),
   axis.text.y=element_text(size=18, hjust = 1, family = "Arial", color = "black"),
@@ -165,7 +169,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   axis.ticks.y =  element_blank(),
   plot.title=element_markdown(size=26,family = "Arial", face = "bold" , hjust= 0,lineheight=1, margin = margin(t = 15)),
   #hjust= 0.035 to make the subtitle (y-axis label) right-aligned 
-  plot.subtitle=element_text(size=24,family = "Arial", hjust= 0, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
+  plot.subtitle=element_text(size=22,family = "Arial", hjust= 0.041, vjust = 0, lineheight=1, margin = margin(t = 15, b = 30), color = "black"),
   plot.caption=element_markdown(size=14, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Arial"),
   plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
   legend.position = c(0.8, 0.5), #center-right corner
@@ -188,15 +192,15 @@ gg <- ggplot(data = teaching_data, mapping = (aes(x =  Value, y = Teaching_pract
   scale_x_continuous(
     limits = c(0, 100),
     breaks = xAxisBreaks,
-    labels = xAxisBreaksLabel,
+    #labels = xAxisBreaksLabel,
     expand = c(0, 0))+
   scale_y_discrete(
     #expand = c(0,0),
     labels = function(x) 
-      stringr::str_wrap(x, width = 35)
+      stringr::str_wrap(x, width = 25)
   )+
   #title
-  labs(x = "", y = "", title = plotTitle, subtitle = plotSubtitle, 
+  labs(x = "Percent", y = "", title = plotTitle, subtitle = plotSubtitle, 
        #caption = plotCaption
   )+
   theme_white
@@ -210,4 +214,4 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching-new.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/ICILS/icils data/icils2018_teaching-v2.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
