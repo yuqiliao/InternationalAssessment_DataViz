@@ -137,33 +137,6 @@ row1
 # now create a function to get the PCT and SE(PCT) for each row (each teaching practice)
 getTeacherPracticePct <- function(teachingPractice, dataframe){
   
-  row <- edsurveyTable(as.formula(paste0("idteach ~ perceptionICTCategory + ", teachingPractice)) , 
-                        data = dataframe %>% 
-                          filter(!.data[[teachingPractice]] %in% ("I DO NOT USE THIS PRACTICE WITH THE REFERENCE CLASS")) %>% 
-                          filter(!.data[["perceptionICTCategory"]] == "NA"),
-                          jrrIMax = Inf, 
-                          recode = list(teachingPractice = list(from = c("I OFTEN USE ICT WITH THIS PRACTISE", "I ALWAYS USE ICT WITH THIS PRACTISE"), to = "often or always use this ICT")
-                          )
-                          ) %>%
-    #similar to t3$data
-    extract2("data") %>%
-    #select columns of interests
-    select("perceptionICTCategory",teachingPractice,"PCT", "SE(PCT)") %>%
-    #select rows of interests
-    filter(.data[[teachingPractice]]  == "often or always use this ICT")
-  
-  return(row)
-}
-
-getTeacherPracticePct(teachingPractice = "it2g11a", dataframe = ICILS2018dfNew)
-  
-
-#test
-
-
-
-getTeacherPracticePct <- function(teachingPractice, dataframe){
-  
   recodeList1 <- list(from = c("I OFTEN USE ICT WITH THIS PRACTISE", "I ALWAYS USE ICT WITH THIS PRACTISE"), to = "often or always use this ICT")
   #using `setNames` so `teachingPractice` gets evaluated as `it2g11a`, not as the `teachingPractice` string.
   recodeList2 <- setNames(list(recodeList1), teachingPractice)
@@ -198,6 +171,74 @@ getTeacherPracticePct(teachingPractice = "it2g11g", dataframe = ICILS2018dfNew)
 getTeacherPracticePct(teachingPractice = "it2g11h", dataframe = ICILS2018dfNew)
 getTeacherPracticePct(teachingPractice = "it2g11i", dataframe = ICILS2018dfNew)
 getTeacherPracticePct(teachingPractice = "it2g11j", dataframe = ICILS2018dfNew)
+
+
+# calculate accurate t-tests (aka not rounding and do "summarize" in the end)
+
+getTeacherPracticePctBtwGrpSig <- function(teachingPractice, dataframe){
+  
+  recodeList1 <- list(from = c("I OFTEN USE ICT WITH THIS PRACTISE", "I ALWAYS USE ICT WITH THIS PRACTISE"), to = "often or always use this ICT")
+  #using `setNames` so `teachingPractice` gets evaluated as `it2g11a`, not as the `teachingPractice` string.
+  recodeList2 <- setNames(list(recodeList1), teachingPractice)
+  
+  row <- edsurveyTable(as.formula(paste0("idteach ~ perceptionICTCategory + ", teachingPractice)) , 
+                       data = dataframe %>% 
+                         filter(!.data[[teachingPractice]] %in% ("I DO NOT USE THIS PRACTICE WITH THE REFERENCE CLASS")) %>% 
+                         filter(!.data[["perceptionICTCategory"]] == "NA"),
+                       jrrIMax = Inf, 
+                       recode = recodeList2
+  )  %>%
+    #similar to t3$data
+    extract2("data") %>%
+    #select columns of interests
+    select(all_of( c("perceptionICTCategory",teachingPractice,"PCT", "SE(PCT)") )) %>%
+    #select rows of interests
+    filter(.data[[teachingPractice]]  == "often or always use this ICT") 
+  
+  #perform independent t-test
+  numerator <- row$PCT[1]-row$PCT[2]
+  
+  denominator <- sqrt( row$`SE(PCT)`[1]^2 + row$`SE(PCT)`[2]^2 )
+  
+  tScore <- numerator/denominator
+  
+  return(tScore)
+}
+
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11a", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11b", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11c", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11d", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11e", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11f", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11g", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11h", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11i", dataframe = ICILS2018dfNew)
+getTeacherPracticePctBtwGrpSig(teachingPractice = "it2g11j", dataframe = ICILS2018dfNew)
+
+
+
+###experienced - successfully replicate table 5 in the report
+t_exles
+summary2(ICILS2018dfNew, "t_exles")
+
+it2g05a
+summary2(ICILS2018dfNew, "it2g05a") #it looks the same as the derived variable. Yan recommends using this one.
+
+t5 <- edsurveyTable(idteach ~ it2g05a + it2g11a , 
+                    data = ICILS2018dfNew %>% 
+                      filter(!it2g11a %in% ("I DO NOT USE THIS PRACTICE WITH THE REFERENCE CLASS")) ,
+                    jrrIMax = Inf, 
+                    recode = list(it2g11a = list(from = c("I OFTEN USE ICT WITH THIS PRACTISE", "I ALWAYS USE ICT WITH THIS PRACTISE"), to = "often or always use this ICT"),
+                                  it2g05a = list(from = c("NEVER", "LESS THAN TWO YEARS"), to = "never or less than 2"))) %>% 
+  #similar to t3$data
+  extract2("data") %>% 
+  #select columns of interests
+  select(1,2,5,6) %>% 
+  #select rows of interests
+  filter(it2g11a  == "often or always use this ICT")
+
+t5
 
 
 
