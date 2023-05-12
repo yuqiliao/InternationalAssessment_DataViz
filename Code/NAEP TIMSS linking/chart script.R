@@ -20,13 +20,13 @@ table8 <- read_csv(file = "Code/NAEP TIMSS linking/table-8-g8science.csv")
 table6$Level <- factor(table6$Level, levels = c("Below Basic", "Basic", "Proficient", "Advanced"))
 table8$Level <- factor(table8$Level, levels = c("Below Basic", "Basic", "Proficient", "Advanced"))
 
-basic_g8math <- 469
-proficient_g8math <- 556
-advanced_g8math <- 637
+basic_g8math <- 466
+proficient_g8math <- 558
+advanced_g8math <- 642
 
-basic_g8science <- 494
-proficient_g8science <- 567
-advanced_g8science <- 670
+basic_g8science <- 486
+proficient_g8science <- 568
+advanced_g8science <- 696
 
 ##### viz 1 #####
 plotTitle <- c("<span>Achievement levels associated with average scores in grade 8<br>TIMSS mathematics, by education system: 2019</span>")
@@ -65,7 +65,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   plot.caption=element_markdown(size=14, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Arial"),
   plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
   #legend.position ="bottom",
-  legend.position = c(.92, .5),
+  legend.position = c(.93, .45),
   # legend.justification = "center",
   # legend.box.just = "left",
   #legend.title = element_blank(),
@@ -86,11 +86,11 @@ gg <- ggplot(data = table6, mapping = (aes(y = fct_reorder(Nation, Mean), x = Me
   
   #proficiency level text
   annotate(geom="rect", xmin = basic_g8math-12, xmax = basic_g8math + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = basic_g8math, y = 26, label = "Basic\n469" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = basic_g8math, y = 26, label = "Basic\n466" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   annotate(geom="rect", xmin = proficient_g8math-12, xmax = proficient_g8math + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = proficient_g8math, y = 26, label = "Proficient\n556" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = proficient_g8math, y = 26, label = "Proficient\n558" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   annotate(geom="rect", xmin = advanced_g8math-12, xmax = advanced_g8math + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = advanced_g8math, y = 26, label = "Advanced\n637" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = advanced_g8math, y = 26, label = "Advanced\n642" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   
   #mean points
   geom_segment(aes(x=100, xend=Mean, y=fct_reorder(Nation, Mean), yend=fct_reorder(Nation, Mean)), color="#b5b5b5", linetype="dotted")+
@@ -131,7 +131,7 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/NAEP TIMSS linking/table6-v1.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/NAEP TIMSS linking/table6-v3.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
 
 
 
@@ -173,7 +173,7 @@ theme_white <- theme(#aspect.ratio = 1.2:1,
   plot.caption=element_markdown(size=14, hjust = 0,margin=margin(t=15, b = 15),lineheight=1.15, family = "Arial"),
   plot.margin = unit(c(t = .3, r = 1, b = 0.3, l = 1), "cm"),
   #legend.position ="bottom",
-  legend.position = c(.92, .5),
+  legend.position = c(.93, .45),
   # legend.justification = "center",
   # legend.box.just = "left",
   #legend.title = element_blank(),
@@ -194,11 +194,11 @@ gg <- ggplot(data = table8, mapping = (aes(y = fct_reorder(Nation, Mean), x = Me
   
   #proficiency level text
   annotate(geom="rect", xmin = basic_g8science-12, xmax = basic_g8science + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = basic_g8science, y = 26, label = "Basic\n494" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = basic_g8science, y = 26, label = "Basic\n486" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   annotate(geom="rect", xmin = proficient_g8science-12, xmax = proficient_g8science + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = proficient_g8science, y = 26, label = "Proficient\n567" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = proficient_g8science, y = 26, label = "Proficient\n568" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   annotate(geom="rect", xmin = advanced_g8science-12, xmax = advanced_g8science + 12, ymin = 24, ymax = 28, fill = "white")+
-  annotate(geom="text", x = advanced_g8science, y = 26, label = "Advanced\n670" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
+  annotate(geom="text", x = advanced_g8science, y = 26, label = "Advanced\n696" , color = "#404040", size = 5,  angle = 0, hjust = 0.5) +
   
   #mean points
   geom_segment(aes(x=100, xend=Mean, y=fct_reorder(Nation, Mean), yend=fct_reorder(Nation, Mean)), color="#b5b5b5", linetype="dotted")+
@@ -239,4 +239,4 @@ g$layout$l[g$layout$name == "subtitle"] <- 4
 
 grid.draw(g)
 
-ggsave(paste0(getwd(), "/Code/NAEP TIMSS linking/table8-v1.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
+ggsave(paste0(getwd(), "/Code/NAEP TIMSS linking/table8-v3.png"), g, width = 1200, height = 800, units = "px", scale = 3.5)
