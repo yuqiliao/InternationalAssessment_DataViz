@@ -1,6 +1,7 @@
 ### NAEP State Mapping Figure
 ### 1/29/19
 ### Yuqi Liao, Michael Lee, & Howard Huo
+### Updated on 5/9/24 for the report in 2024
 
 
 
@@ -24,17 +25,17 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure2_12142020_yl.xlsx", sheet = tab)
+  data <- read_excel("./Materials/G4G8Figure2_05092024_yl.xlsx", sheet = tab)
   
   # define yearCol
   if ( grepl("R", tab) ) {
-    data[data$year == 2009, "yearCol"] <- "#8E9FBC" 
-    data[data$year == 2017, "yearCol"] <- "#C8942B"
-    data[data$year == 2019, "yearCol"] <- "#212C68"
+    data[data$year == 2013, "yearCol"] <- "#8E9FBC" 
+    data[data$year == 2019, "yearCol"] <- "#C8942B"
+    data[data$year == 2022, "yearCol"] <- "#212C68"
   } else {
-    data[data$year == 2009, "yearCol"] <- "#00AE9A"
-    data[data$year == 2017, "yearCol"] <- "#C8942B"
-    data[data$year == 2019, "yearCol"] <- "#007167" 
+    data[data$year == 2013, "yearCol"] <- "#00AE9A"
+    data[data$year == 2019, "yearCol"] <- "#C8942B"
+    data[data$year == 2022, "yearCol"] <- "#007167" 
   }
   
   
@@ -44,7 +45,7 @@ for (tab in tabList){
   
   orderYear <- unique(data$year)
   data$year <- factor(data$year, levels = orderYear,
-                      labels = c(" 2009", " 2017", " 2019"))
+                      labels = c(" 2013", " 2019", " 2022"))
   
   glimpse(data)
   ### Plotting -----
@@ -57,8 +58,8 @@ for (tab in tabList){
   
   
   # load font
-  font_add_google("Open Sans")
-  showtext_auto()
+  # font_add_google("Open Sans")
+  # showtext_auto()
   
   # define theme_general
   theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
@@ -167,6 +168,8 @@ for (tab in tabList){
   # save as
   setEPS()
   postscript(paste0("./Results/",today(), "-", "figure2", tab, ".eps"), family = "Open Sans", width = 3.8, height = 2.1025) #width and height are in inches
+  #add save as png for review
+  ggsave(paste0("./Results/", today(), "-", "figure2", tab, ".png"), width = 3.8, height = 2.1025)
   grid::grid.draw(g)
   dev.off()
 

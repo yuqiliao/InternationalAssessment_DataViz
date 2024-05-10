@@ -1,6 +1,7 @@
 ### NAEP State Mapping Figure
 ### 1/16/19
 ### Yuqi Liao, Michael Lee, & Howard Huo
+### Updated on 5/9/24 for the report in 2024
 
 
 
@@ -23,11 +24,11 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure3_12142020_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure3_05092024_yl.xlsx", sheet = tab) %>% 
   dplyr::select(`year`, `Highest`, `Lowest`, `range`)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_12142020_yl.xlsx", sheet = tab) %>% 
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_05092024_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
@@ -99,41 +100,42 @@ for (tab in tabList){
   # proficient <- 238
   
   # define functions to squish space between empty years [reference: https://stackoverflow.com/questions/47234710/how-can-i-remove-part-of-y-axis-and-reverse-the-axis-in-ggplot2]
-  squish_trans <- function(from, to, factor) { 
-    
-    trans <- function(x) {    
-      # get indices for the relevant regions
-      isq <- x > from & x < to
-      ito <- x >= to
-      
-      # apply transformation
-      x[isq] <- from + (x[isq] - from)/factor
-      x[ito] <- from + (to - from)/factor + (x[ito] - to)
-      
-      return(x)
-    }
-    
-    inv <- function(x) {
-      
-      # get indices for the relevant regions
-      isq <- x > from & x < from + (to - from)/factor
-      ito <- x >= from + (to - from)/factor
-      
-      # apply transformation
-      x[isq] <- from + (x[isq] - from) * factor
-      x[ito] <- to + (x[ito] - (from + (to - from)/factor))
-      
-      return(x)
-    }
-    
-    # return the transformation
-    return(trans_new("squished", trans, inv))
-  }
+  # update 05/09/24: based on my note: it looks like this function is no longer working/used.
+  # squish_trans <- function(from, to, factor) { 
+  #   
+  #   trans <- function(x) {    
+  #     # get indices for the relevant regions
+  #     isq <- x > from & x < to
+  #     ito <- x >= to
+  #     
+  #     # apply transformation
+  #     x[isq] <- from + (x[isq] - from)/factor
+  #     x[ito] <- from + (to - from)/factor + (x[ito] - to)
+  #     
+  #     return(x)
+  #   }
+  #   
+  #   inv <- function(x) {
+  #     
+  #     # get indices for the relevant regions
+  #     isq <- x > from & x < from + (to - from)/factor
+  #     ito <- x >= from + (to - from)/factor
+  #     
+  #     # apply transformation
+  #     x[isq] <- from + (x[isq] - from) * factor
+  #     x[ito] <- to + (x[ito] - (from + (to - from)/factor))
+  #     
+  #     return(x)
+  #   }
+  #   
+  #   # return the transformation
+  #   return(trans_new("squished", trans, inv))
+  # }
   
   
   # load font
-  font_add_google("Open Sans")
-  showtext_auto()
+  # font_add_google("Open Sans")
+  # showtext_auto()
   
   # define theme_general
   theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
@@ -176,13 +178,13 @@ for (tab in tabList){
     
     
     # add achievement level text - version 2
-    annotate("text", x = 2015, y = basic - 5, label = paste0("(", basic, ")"), 
+    annotate("text", x = 2016, y = basic - 5, label = paste0("(", basic, ")"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2015, y = basic + 5, label = paste0("NAEP~italic(Basic)"), 
+    annotate("text", x = 2016, y = basic + 5, label = paste0("NAEP~italic(Basic)"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2015 , y = proficient - 5, label = paste0("(", proficient, ")"), 
+    annotate("text", x = 2016 , y = proficient - 5, label = paste0("(", proficient, ")"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
-    annotate("text", x = 2015 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)"), 
+    annotate("text", x = 2016 , y = proficient + 5, label = paste0("NAEP~italic(Proficient)"), 
              parse = TRUE, hjust = 0.5, color = "#77787B", size = 3.5, family="Open Sans") +
     
     #scale_x_discrete() +
@@ -206,8 +208,8 @@ for (tab in tabList){
                        labels = c(0, yAxisBreaks[2:(length(yAxisBreaks) - 1)], 500), 
                        breaks = yAxisBreaks, expand = c(0,0)) +
     scale_x_continuous(#limits = c(2006, 2018),
-                       labels = c(2013, 2017, 2019),
-                       breaks = c(2013, 2017, 2019)) +
+                       labels = c(2013, 2019, 2022),
+                       breaks = c(2013, 2019, 2022)) + #YL: the years here are not chagning anything, the year positions are determined in the `geom_rect` call above
     coord_cartesian(clip = "off") +
     annotate("segment", x = -Inf, xend = -Inf, y = min(yAxisBreaks), yend = yAxisBreaksMin - 1, color = "#2d2a26", size = 0.235) +
     annotate("segment", x = -Inf, xend = -Inf, y = yAxisBreaksMin + 1, yend = yAxisBreaksMax - 1, color = "#2d2a26", size = 0.235) +
@@ -246,6 +248,8 @@ for (tab in tabList){
   # save as
   setEPS()
   postscript(paste0("./Results/", today(), "-", "figure3", tab, ".eps"), family = "Open Sans", width = 3.8, height = 3.718) #width and height are in inches
+  #add save as png for review
+  ggsave(paste0("./Results/", today(), "-", "figure3", tab, ".png"), width = 3.8, height = 3.718)
   grid::grid.draw(g)
   dev.off()
 

@@ -1,7 +1,7 @@
 ### NAEP State Mapping Figure
 ### 1/16/19
 ### Yuqi Liao, Michael Lee, & Howard Huo
-
+### Updated on 5/9/24 for the report in 2024
 
 
 ### Setting things up -----
@@ -23,7 +23,7 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure1_05182021_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure1_05092024_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`Consortia`, `st`, `NSE`, `Band +/-`, `NAEP Achivement Level`) %>% 
     #getting rid of irrelevant rows (if any)
     dplyr::filter(!`st` %in% c("AC", "SB", "PC", NA)) %>% 
@@ -38,7 +38,7 @@ for (tab in tabList){
     dplyr::filter(!midPoint %in% NA)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_05182021_yl.xlsx", sheet = tab) %>%
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_05092024_yl.xlsx", sheet = tab) %>%
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
@@ -121,9 +121,9 @@ for (tab in tabList){
     errorBarCol <- "#007167"
   }
   
-  # load font
-  font_add_google("Open Sans")
-  showtext_auto()
+  # load font #update on 5/9/24 the following code no longer works somehow. I did a `font_import()` (one time code) instead. Later I called `loadfonts(device = "postscript")`
+  # font_add_google("Open Sans")
+  # showtext_auto()
   
   # define theme_general
   theme_general <- theme(text=element_text(family="Open Sans", color = "#000000"),
@@ -243,6 +243,8 @@ for (tab in tabList){
   # save as
   setEPS()
   postscript(paste0("./Results/", today(), "-", "figure1", tab, ".eps"), family = "Open Sans", width = 7.667, height = 3.718) #width and height are in inches
+  #add save as png for review
+  ggsave(paste0("./Results/", today(), "-", "figure1", tab, ".png"), width = 7.667, height = 3.718)
   grid::grid.draw(g)
   dev.off()
   
