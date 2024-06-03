@@ -24,11 +24,11 @@ tabList <- c("R_G4", "M_G4", "R_G8", "M_G8")
 
 ### Reading in data -----
 for (tab in tabList){
-  data <- read_excel("./Materials/G4G8Figure3_05092024_yl.xlsx", sheet = tab) %>% 
+  data <- read_excel("./Materials/G4G8Figure3_06032024_yl.xlsx", sheet = tab) %>% 
   dplyr::select(`year`, `Highest`, `Lowest`, `range`)
   
   # define achievement level
-  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_05092024_yl.xlsx", sheet = tab) %>% 
+  proficiencyLevelList <- read_excel("./Materials/G4G8Figure1_06032024_yl.xlsx", sheet = tab) %>% 
     dplyr::select(`ProficiencyLevel`, `Value`) %>% 
     na.omit() %>% 
     pull()
